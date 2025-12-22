@@ -29,7 +29,7 @@
             v-for="tour in visibleTours"
             :key="tour.id"
             class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:scale-105">
-            <article>
+            <article @click="openTour(tour)" class="cursor-pointer">
               <figure class="relative">
                 <img
                   :src="api('/images/' + tour.image + '.jpg')"
@@ -108,18 +108,27 @@
           ]"
           aria-label="'Go to slide ' + n"></button>
       </nav>
+    <TourDetail
+      v-if="showTourDetail"
+      :key="selectedTour?.id"
+      :tour="selectedTour"
+      @close="closeTour" />
     </main>
   </section>
 </template>
-
 
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { api } from "../api.js";
+import TourDetail from "./TourDetail.vue";
+
 const currentSlide = ref(0);
 const toursPerPage = ref(4);
 const tours = ref([]);
+const selectedTour = ref(null);
+const showTourDetail = ref(false);
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const totalSlides = computed(() => {
@@ -155,16 +164,24 @@ const handleResize = () => {
 
 const fetchTours = async () => {
   try {
-
-    const response = await fetch(api('/tours'));
+    const response = await fetch(api("/tours"));
     const json = await response.json();
 
-    console.log("Fetched tours data:", json.data);
     tours.value = json.data;
-    console.log("tours na fetch:", tours.value);
   } catch (error) {
     console.error("Error fetching tours:", error);
   }
+};
+
+const openTour = async (tour) => {
+  const res = await fetch(`${API_URL}/tours/${tour.id}`);
+  selectedTour.value = await res.json();
+  showTourDetail.value = true;
+};
+
+const closeTour = () => {
+  selectedTour.value = null;
+  showTourDetail.value = false;
 };
 
 onMounted(() => {

@@ -43,7 +43,7 @@
               alt="Jeroen Verstegen"
               class="w-full h-full object-cover" />
             <div
-              class="absolute inset-0 bg-linear-to-t from-black to-transparent opacity-50"></div>
+              class="absolute inset-0 bg-linear-to-t from-black to-transparent opacity-20"></div>
             <div class="absolute text-right bottom-0 left-0 p-2 text-white">
               <h3 class="text-2xl font-garamond italic">Your guide: Jeroen</h3>
             </div>
