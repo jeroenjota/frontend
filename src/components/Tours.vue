@@ -1,8 +1,8 @@
 <template>
-  <section id="tours" class="py-16 scroll-mt-20 bg-green-100">
+  <section id="tours" class="scroll-mt-20 bg-green-100 py-16">
     <main class="container mx-auto px-4">
-      <header class="flex justify-between items-center mb-8 mt-4">
-        <h2 class="md:text-4xl text-3xl font-bold font-garamond text-primary">
+      <header class="mb-8 mt-4 flex items-center justify-between">
+        <h2 class="font-garamond text-primary text-3xl font-bold md:text-4xl">
           Featured Tours
         </h2>
         <nav
@@ -10,13 +10,13 @@
           aria-label="Tour Carousel Controls">
           <button
             @click="prevSlide"
-            class="bg-white text-cyan-900 p-2 shadow-md rounded-full hover:bg-cyan-100 transition-colors"
+            class="rounded-full bg-white p-2 text-cyan-900 shadow-md transition-colors hover:bg-cyan-100"
             aria-label="Previous tour">
             <Icon icon="line-md:arrow-small-left" width="24" height="24" />
           </button>
           <button
             @click="nextSlide"
-            class="bg-white text-cyan-900 p-2 shadow-md rounded-full hover:bg-cyan-100 transition-colors"
+            class="rounded-full bg-white p-2 text-cyan-900 shadow-md transition-colors hover:bg-cyan-100"
             aria-label="Next tour">
             <Icon icon="line-md:arrow-small-right" width="24" height="24" />
           </button>
@@ -24,25 +24,26 @@
       </header>
       <section class="relative overflow-hidden">
         <ul
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <li
             v-for="tour in visibleTours"
             :key="tour.id"
-            class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:scale-105">
-            <article @click="openTour(tour)" class="cursor-pointer">
+            class="overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
+            
+            <article  @click="openTour(tour)" class="cursor-pointer">
               <figure class="relative">
                 <img
-                  :src="api('/images/' + tour.image + '.jpg')"
+                  :src="api('/uploads/resized/' + tour.image)"
                   :alt="tour.title"
-                  class="w-full h-64 object-cover" />
+                  class="h-64 w-full object-cover" />
                 <figcaption
                   v-if="tour.discount > 0"
-                  class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  class="absolute right-3 top-3 rounded-full bg-red-500 px-2 py-1 text-xs font-bold text-white">
                   -{{ tour.discount }}% OFF
                 </figcaption>
 
                 <button
-                  class="absolute top-3 left-3 p-2 bg-white rounded-full shadow-md hover:bg-cyan-100 text-gray-700"
+                  class="absolute left-3 top-3 rounded-full bg-white p-2 text-gray-700 shadow-md hover:bg-cyan-100"
                   aria-label="Add to wishlist">
                   <Icon icon="line-md:heart" width="18" height="18" />
                 </button>
@@ -59,18 +60,18 @@
                           ? 'text-yellow-400'
                           : 'text-gray-300'
                       " />
-                    <span class="text-sm text-gray-500 ml-1"
+                    <span class="ml-1 text-sm text-gray-500"
                       >({{ tour.rating }})</span
                     >
                   </div>
-                  <h3 class="text-lg font-semibold text-gray-800 mb-1">
+                  <h3 class="mb-1 text-lg font-semibold text-gray-800">
                     {{ tour.title }}
                   </h3>
                   <footer class="flex items-center justify-between">
                     <div>
                       <span
                         v-if="tour.discount > 0"
-                        class="text-sm text-gray-500 line-through mr-2"
+                        class="mr-2 text-sm text-gray-500 line-through"
                         >€{{ tour.price.toFixed(2) }}
                       </span>
                       <span class="text-lg font-bold text-cyan-600"
@@ -81,7 +82,7 @@
                     </div>
                     <button
                       aria-label="Book tour"
-                      class="p-2 bg-green-950 rounded-full text-white hover:bg-green-700 transition-colors">
+                      class="rounded-full bg-green-950 p-2 text-white transition-colors hover:bg-green-700">
                       <Icon
                         icon="icon-park-solid:shopping"
                         width="18"
@@ -96,7 +97,7 @@
       </section>
       <!-- Slide pagination -->
       <nav
-        class="flex justify-center mt-6 space-x-2"
+        class="mt-6 flex justify-center space-x-2"
         aria-label="Carousel pagination">
         <button
           v-for="n in totalSlides"
@@ -164,17 +165,17 @@ const handleResize = () => {
 
 const fetchTours = async () => {
   try {
-    const response = await fetch(api("/tours"));
+    const response = await fetch(api("/api/tours/"));
     const json = await response.json();
 
-    tours.value = json.data;
+    tours.value = json;
   } catch (error) {
     console.error("Error fetching tours:", error);
   }
 };
 
 const openTour = async (tour) => {
-  const res = await fetch(`${API_URL}/tours/${tour.id}`);
+  const res = await fetch(api(`/api/tours/${tour.id}`));
   selectedTour.value = await res.json();
   showTourDetail.value = true;
 };
