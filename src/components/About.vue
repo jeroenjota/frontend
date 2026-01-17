@@ -1,12 +1,12 @@
 <template>
   <div
     id="about"
-    class="bg-linear-to-r scroll-mt-32 from-blue-200 to-white px-4 py-6 sm:px-6 lg:px-8">
+    class="bg-linear-to-r scroll-mt-40 from-blue-200 to-white px-4 py-6 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
       <h2 class="text-primary font-garamond mb-6 text-5xl font-bold">
         About Me
       </h2>
-      <p class="mb-0 mb-2 mt-4 text-2xl text-gray-900">
+      <p class="mb-2 mt-4 text-2xl text-gray-900">
         Hello, nice to meet you! My name is Jeroen (Jerome),
       </p>
       <p>

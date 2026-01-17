@@ -1,5 +1,5 @@
 <template>
-<section id="home" class="scroll-mt-32 bg-sky-100">
+<section id="home" class="scroll-mt-40 bg-sky-100">
   <div
     class="relative flex h-80 items-center justify-center bg-cover bg-center bg-no-repeat"
     :style="{ backgroundImage: `url(${bg})` }"
@@ -37,7 +37,7 @@
               </a>
 
               <a
-                href="#tours"
+                href="#discounts"
                 class="text-primary rounded-lg border border-sky-600 px-6 py-3 text-sm font-semibold transition hover:bg-white/10"
               >
                 Special offers
@@ -53,7 +53,7 @@
 <script setup>
 // public/img/keukenhof02.jpg
 import mainImage from "../img/keukenhof02.jpg";
-import bg from "../img/centraal_station.jpg";
+import bg from "../img/main.jpg";
 
 </script>
 <style lang=""></style>

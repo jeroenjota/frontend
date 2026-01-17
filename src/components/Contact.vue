@@ -1,10 +1,10 @@
 <template>
   <div
     id="contact"
-    class="bg-linear-to-r scroll-mt-32 from-sky-200 to-blue-50 px-4 py-6 sm:px-6 lg:px-8">
+    class="bg-linear-to-r scroll-mt-40 from-indigo-400 to-blue-500 px-4 py-6 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
-      <div class="mb-12 text-center">
-        <h1 class="text-primary font-garamond mb-4 text-4xl font-bold">
+      <div class="mb-4 text-center">
+        <h1 class="font-garamond mb-2 text-2xl font-bold text-white md:text-4xl">
           Contact Us
         </h1>
       </div>

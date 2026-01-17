@@ -1,9 +1,9 @@
 <template>
-  <section id="categories" class="scroll-mt-20 bg-cyan-100 py-16">
+  <section id="categories" class="scroll-mt-40 bg-cyan-100 py-16">
     <div class="container mx-auto px-4">
       <!-- Section Header -->
-      <div class="mb-12 text-center">
-        <h2 class="text-primary mb-4 text-3xl font-bold">
+      <div class="mb-4 text-center">
+        <h2 class="text-primary font-garamond mb-2 text-3xl font-bold">
           Explore by Categories
         </h2>
         <p class="mx-auto max-w-2xl text-lg text-gray-800">

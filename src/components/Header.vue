@@ -14,7 +14,7 @@
           <div class="flex w-full items-center justify-between md:w-auto">
             <a href="#home" class="py-2 text-2xl font-bold text-cyan-800">
               <img
-                src="../img/logo.gif"
+                :src="api('/uploads/system/logo.gif')"
                 class="h-16 sm:h-20 md:h-24 lg:h-32"
                 alt="" />
             </a>
@@ -135,11 +135,11 @@ const navItems = [
   },
   {
     id: 4,
-    name: "Offers",
-    link: "#offers",
+    name: "Discounts",
+    link: "#discounts",
     loc: "internal",
     icon: "mdi:tag-outline",
-    showItem: false,
+    showItem: true,
   },
   {
     id: 5,
@@ -173,7 +173,7 @@ const adresItems = [
   { id: 3, type: "email", value: "info@jotatours.nl", icon: "mdi:email" },
 ];
 
-import jotaLogo from "../img/logo.gif";
+// import jotaLogo from "../img/logo.gif";
 import {api} from "../api.js";
 import { Icon } from "@iconify/vue";
 

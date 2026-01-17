@@ -1,8 +1,9 @@
 <template>
-  <section id="tours" class="scroll-mt-32 bg-green-100 py-4">
+  <section id="tours" class="scroll-mt-40 bg-cyan-100 py-4">
     <main class="container mx-auto px-4">
-      <header class="mb-8 mt-4 flex items-center justify-between">
-        <h2 class="font-garamond text-primary text-3xl font-bold md:text-4xl">
+      <!-- Section Header -->
+      <header class="mb-4 text-center">
+        <h2 class="text-primary font-garamond mb-2 text-3xl font-bold">
           Featured Tours
         </h2>
         <nav
@@ -183,16 +184,16 @@ const fetchTours = async () => {
   }
 };
 
-const openTour = async (tour) => {
-  const res = await fetch(api(`/api/public/tours/${tour.slug}`));
-  selectedTour.value = await res.json();
-  showTourDetail.value = true;
-};
+// const openTour = async (tour) => {
+//   const res = await fetch(api(`/api/public/tours/${tour.slug}`));
+//   selectedTour.value = await res.json();
+//   showTourDetail.value = true;
+// };
 
-const closeTour = () => {
-  selectedTour.value = null;
-  showTourDetail.value = false;
-};
+// const closeTour = () => {
+//   selectedTour.value = null;
+//   showTourDetail.value = false;
+// };
 
 onMounted(() => {
   fetchTours();
