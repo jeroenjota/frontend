@@ -1,12 +1,12 @@
 <template>
   <div
     id="about"
-    class="py-16 scroll-mt-20 bg-linear-to-r from-blue-200 to-white px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-5xl font-bold text-primary mb-6 font-garamond">
+    class="bg-linear-to-r scroll-mt-32 from-blue-200 to-white px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+      <h2 class="text-primary font-garamond mb-6 text-5xl font-bold">
         About Me
       </h2>
-      <p class="text-gray-900 mt-4 mb-0 text-2xl mb-2">
+      <p class="mb-0 mb-2 mt-4 text-2xl text-gray-900">
         Hello, nice to meet you! My name is Jeroen (Jerome),
       </p>
       <p>
@@ -14,9 +14,9 @@
         forward to meeting you and take you on a tour to discover the
         Netherlands like never before. You will love the experience!
       </p>
-      <div class="flex flex-col lg:flex-row gap-12 mb-5">
+      <div class="mb-5 flex flex-col gap-12 lg:flex-row">
         <!-- Text Section -->
-        <div class="lg:w-2/3 flex flex-col justify-center">
+        <div class="flex flex-col justify-center lg:w-2/3">
           <p class="mb-2"></p>
           <p>
             I was born in Amsterdam in 1956 and, although I have lived in many
@@ -36,16 +36,16 @@
           </p>
         </div>
         <!-- Image Section -->
-        <div class="lg:w-1/2 flex justify-center">
-          <div class="relative rounded-2xl overflow-hidden h-96 shadow-xl">
+        <div class="flex justify-center lg:w-1/2">
+          <div class="relative h-96 overflow-hidden rounded-2xl shadow-xl">
             <img
               src="../img/verstegen_j.jpg"
               alt="Jeroen Verstegen"
-              class="w-full h-full object-cover" />
+              class="h-full w-full object-cover" />
             <div
-              class="absolute inset-0 bg-linear-to-t from-black to-transparent opacity-20"></div>
-            <div class="absolute text-right bottom-0 left-0 p-2 text-white">
-              <h3 class="text-2xl font-garamond italic">Your guide: Jeroen</h3>
+              class="bg-linear-to-t absolute inset-0 from-black to-transparent opacity-20"></div>
+            <div class="absolute bottom-0 left-0 p-2 text-right text-white">
+              <h3 class="font-garamond text-2xl italic">Your guide: Jeroen</h3>
             </div>
           </div>
         </div>
@@ -92,6 +92,7 @@
         </p>
       </div>
     </div>
+
   </div>
 </template>
 <script setup></script>

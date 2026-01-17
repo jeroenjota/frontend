@@ -1,5 +1,5 @@
 <template>
-  <section id="tours" class="scroll-mt-20 bg-green-100 py-16">
+  <section id="tours" class="scroll-mt-32 bg-green-100 py-4">
     <main class="container mx-auto px-4">
       <header class="mb-8 mt-4 flex items-center justify-between">
         <h2 class="font-garamond text-primary text-3xl font-bold md:text-4xl">
@@ -28,9 +28,8 @@
           <li
             v-for="tour in visibleTours"
             :key="tour.id"
-            class="overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-105">
-            
-            <article  @click="openTour(tour)" class="cursor-pointer">
+            class="hover:scale-102 overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300">
+            <article @click="$emit('open-tour', tour)" class="cursor-pointer">
               <figure class="relative">
                 <img
                   :src="api('/uploads/resized/' + tour.image)"
@@ -47,7 +46,7 @@
                   aria-label="Add to wishlist">
                   <Icon icon="line-md:heart" width="18" height="18" />
                 </button>
-                <section class="p-4">
+                <section class="bg-sky-100 p-4">
                   <div class="flex items-center">
                     <Icon
                       v-for="i in 5"
@@ -64,11 +63,26 @@
                       >({{ tour.rating }})</span
                     >
                   </div>
-                  <h3 class="mb-1 text-lg font-semibold text-gray-800">
-                    {{ tour.title }}
-                  </h3>
-                  <footer class="flex items-center justify-between">
+                  <div class="my-2 border-b border-t">
+                    <h3 class="mb-2 ml-1 flex h-24 items-center text-center text-lg font-semibold text-blue-800">
+                      {{ tour.title }}
+                    </h3>
+                  </div>
+                  <div
+                    class="mb-4 flex items-center justify-between gap-2 font-semibold">
                     <div>
+                      <span class="text-sm text-gray-600"
+                        >{{ tour.duration }} hours</span
+                      >
+                    </div>
+                    <div>
+                      <span class="text-sm text-gray-600"
+                        >{{ tour.maxpers }} pers</span
+                      >
+                    </div>
+                  </div>
+                  <footer class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
                       <span
                         v-if="tour.discount > 0"
                         class="mr-2 text-sm text-gray-500 line-through"
@@ -109,11 +123,6 @@
           ]"
           aria-label="'Go to slide ' + n"></button>
       </nav>
-    <TourDetail
-      v-if="showTourDetail"
-      :key="selectedTour?.id"
-      :tour="selectedTour"
-      @close="closeTour" />
     </main>
   </section>
 </template>
@@ -165,7 +174,7 @@ const handleResize = () => {
 
 const fetchTours = async () => {
   try {
-    const response = await fetch(api("/api/tours/"));
+    const response = await fetch(api("/api/public/tours"));
     const json = await response.json();
 
     tours.value = json;
@@ -175,7 +184,7 @@ const fetchTours = async () => {
 };
 
 const openTour = async (tour) => {
-  const res = await fetch(api(`/api/tours/${tour.id}`));
+  const res = await fetch(api(`/api/public/tours/${tour.slug}`));
   selectedTour.value = await res.json();
   showTourDetail.value = true;
 };
