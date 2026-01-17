@@ -7,6 +7,7 @@
           Featured Tours
         </h2>
         <nav
+          v-if="tours.length > toursPerPage"
           class="flex justify-end space-x-4"
           aria-label="Tour Carousel Controls">
           <button
@@ -137,14 +138,11 @@ import TourDetail from "./TourDetail.vue";
 const currentSlide = ref(0);
 const toursPerPage = ref(4);
 const tours = ref([]);
-const selectedTour = ref(null);
-const showTourDetail = ref(false);
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 const totalSlides = computed(() => {
   return Math.ceil(tours.value.length / toursPerPage.value);
 });
+
 const visibleTours = computed(() => {
   const start = currentSlide.value * toursPerPage.value;
   const tourSet = tours.value.slice(start, start + toursPerPage.value);

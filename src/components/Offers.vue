@@ -13,7 +13,7 @@
           <span v-else>Limited time discount for these tours</span>
         </p>
         <nav
-          v-if="tours.length > 4"
+          v-if="tours.length > toursPerPage"
           class="flex justify-end space-x-4"
           aria-label="Tour Carousel Controls">
           <button
@@ -30,9 +30,9 @@
           </button>
         </nav>
       </div>
-      <section class="relative overflow-hidden">
+      <section class="relative mx-auto w-3/4 overflow-hidden">
         <ul
-          class="grid grid-cols-1 items-center gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          class="grid grid-cols-1 items-center gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           <li
             v-for="tour in visibleTours"
             :key="tour.id"
@@ -144,14 +144,13 @@ import { api } from "../api.js";
 // import TourDetail from "./TourDetail.vue";
 
 const currentSlide = ref(0);
-const toursPerPage = ref(4);
+const toursPerPage = ref(3);
 const tours = ref([]);
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 const totalSlides = computed(() => {
   return Math.ceil(tours.value.length / toursPerPage.value);
 });
+
 const visibleTours = computed(() => {
   const start = currentSlide.value * toursPerPage.value;
   const tourSet = tours.value.slice(start, start + toursPerPage.value);
@@ -171,12 +170,10 @@ const handleResize = () => {
   const width = window.innerWidth;
   if (width < 640) {
     toursPerPage.value = 1;
-  } else if (width >= 640 && width < 768) {
+  } else if (width >= 640 && width < 1024) {
     toursPerPage.value = 2;
-  } else if (width >= 768 && width < 1024) {
-    toursPerPage.value = 3;
   } else {
-    toursPerPage.value = 4;
+    toursPerPage.value = 3;
   }
 };
 
