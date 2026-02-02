@@ -7,10 +7,10 @@
     </button>
     <Header />
     <Home />
-    <Intro />
+   <!-- <Intro /> -->
     <Tours @open-tour="openTour" />
     <Categories @open-tour="openTour" />
-    <Offers />
+    <Offers @open-tour="openTour"/>
     <About />
     <Contact />
     <Foot />
@@ -24,7 +24,7 @@
 <script setup>
 import { ref } from "vue";
 import Header from "./components/Header.vue";
-import Intro from "./components/Intro.vue";
+// import Intro from "./components/Intro.vue";
 import Home from "./components/Home.vue";
 import Tours from "./components/Tours.vue";
 import TourDetail from "./components/TourDetail.vue";
@@ -38,6 +38,7 @@ const selectedTour = ref(null);
 const showTourDetail = ref(false);
 
 function openTour(tour) {
+  console.log("Opening tour:", tour);
   selectedTour.value = tour;
   showTourDetail.value = true;
 }

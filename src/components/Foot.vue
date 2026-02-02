@@ -1,11 +1,11 @@
 <template>
-  <footer id="footer" class="mt-1 bg-cyan-800 py-1 text-gray-300">
+  <footer id="footer" class="text-primary mt-1 bg-cyan-100 py-1">
     <div class="mx-auto max-w-7xl px-4">
       <div class="mb-1 flex flex-col gap-3 border-gray-700 py-2 md:flex-row md:justify-between">
         <!-- friendsLinks -->
-        <div class="w-full rounded-lg border border-gray-400 px-4 py-4 shadow-2xl">
-          <h3 class="font-garamond mb-4 text-lg font-semibold">Friends</h3>
-          <ul class="space-y-2">
+        <div class="w-full rounded-lg border border-gray-400 bg-gray-300 px-4 py-4 shadow-2xl">
+          <h3 class="font-garamond mb-4 text-lg font-semibold sm:text-3xl">Friends</h3>
+          <ul class="space-y-2 text-xl sm:text-2xl">
             <li v-for="(friend, index) in friendsLinks" :key="index">
               <a :href="friend.link" class="transition hover:text-white" target="_blank">
                 <img  class="inline h-12" v-if="friend.logo" :src="friendsLogo(friend.logo)" target="_blank" />
@@ -13,10 +13,10 @@
             </li>
           </ul>
         </div>
-        <div class="w-full rounded-lg border border-gray-400 px-4 py-4 shadow-2xl">
+        <div class="w-full rounded-lg border border-gray-400 bg-gray-300 px-4 py-4 shadow-2xl">
           <!-- Quick Links -->
-          <h3 class="font-garamond mb-4 text-lg font-semibold">Quick Links</h3>
-          <ul class="space-y-2">
+          <h3 class="font-garamond mb-4 text-lg font-semibold sm:text-3xl">Quick Links</h3>
+          <ul class="space-y-2 text-xl sm:text-2xl">
             <li v-for="(link, index) in quickLinks" :key="index">
               <a :href="link.link" class="transition hover:text-white"><Icon :icon="link.icon" class="inline h-5 w-5" /> {{
                 link.name
@@ -25,11 +25,11 @@
           </ul>
         </div>
         <!-- Customer services -->
-        <div class="w-full rounded-lg border border-gray-400 px-4 py-4 shadow-2xl">
-          <h3 class="font-garamond mb-4 text-lg font-semibold">
+        <div class="w-full rounded-lg border border-gray-400 bg-gray-300 px-4 py-4 shadow-2xl">
+          <h3 class="font-garamond mb-4 text-lg font-semibold sm:text-3xl">
             Customer Service
           </h3>
-          <ul class="space-y-2">
+          <ul class="space-y-2 text-xl sm:text-2xl">
             <li v-for="(service, index) in customerServices" :key="index">
               <a :href="service.link" class="transition hover:text-white"><Icon :icon="service.icon" class="inline h-5 w-5" /> {{
                 service.name
@@ -56,9 +56,10 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
-import { api } from "../api";
+import { apiUrl ,assetUrl } from "../api";
 
 const friendsLinks = ref([
+  { name: "", link: "https://www.tourist.com/p/6578", logo: "logo.CXmepMON.svg" },
   { name: "ToursByLocals", link: "https://www.toursbylocals.com/tour-guides/netherlands/amsterdam/guide-profile/jeroen-v-664d21fe96689af34335158a", logo: "tbl_logo.png" },
   { name: "", link: "https://www.amsterdamexperiences.nl/" , logo: "amsterdamexperiences_logo.webp"},
   { name: "KAYAK", link: "https://www.kayak.co.uk/Amsterdam.1334.guide", logo: "kayak.png" },
@@ -88,6 +89,6 @@ const paymentIcons = ref([
 
 function friendsLogo(logo) {
   if (!logo) return null;
-  return api('/uploads/system/' + logo)
+  return assetUrl('/uploads/system/' + logo)
 }
 </script>

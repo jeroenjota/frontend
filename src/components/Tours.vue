@@ -1,9 +1,9 @@
 <template>
-  <section id="tours" class="scroll-mt-40 bg-cyan-100 py-4">
+  <section id="tours" class="scroll-mt-40 bg-cyan-100 py-8">
     <main class="container mx-auto px-4">
       <!-- Section Header -->
       <header class="mb-4 text-center">
-        <h2 class="text-primary font-garamond mb-2 text-3xl font-bold">
+        <h2 class="font-garamond text-primary text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
           Featured Tours
         </h2>
         <nav
@@ -34,7 +34,7 @@
             <article @click="$emit('open-tour', tour)" class="cursor-pointer">
               <figure class="relative">
                 <img
-                  :src="api('/uploads/resized/' + tour.image)"
+                  :src="assetUrl('/uploads/resized/' + tour.image)"
                   :alt="tour.title"
                   class="h-64 w-full object-cover" />
                 <figcaption
@@ -88,11 +88,11 @@
                       <span
                         v-if="tour.discount > 0"
                         class="mr-2 text-sm text-gray-500 line-through"
-                        >€{{ tour.price.toFixed(2) }}
+                        >€{{ Number(tour.price).toFixed(2) }}
                       </span>
                       <span class="text-lg font-bold text-cyan-600"
                         >€{{
-                          (tour.price * (1 - tour.discount / 100)).toFixed(2)
+                          (Number(tour.price) * (1 - tour.discount / 100)).toFixed(2)
                         }}</span
                       >
                     </div>
@@ -132,8 +132,8 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { api } from "../api.js";
-import TourDetail from "./TourDetail.vue";
+import { apiUrl,assetUrl } from "../api.js";
+// import TourDetail from "./TourDetail.vue";
 
 const currentSlide = ref(0);
 const toursPerPage = ref(4);
@@ -173,27 +173,18 @@ const handleResize = () => {
 
 const fetchTours = async () => {
   try {
-    const response = await fetch(api("/api/public/tours"));
+    const response = await fetch(apiUrl("/public/tours"));
     const json = await response.json();
-
+    console.log("Fetched tours data:", json);
     tours.value = json;
   } catch (error) {
     console.error("Error fetching tours:", error);
   }
 };
 
-// const openTour = async (tour) => {
-//   const res = await fetch(api(`/api/public/tours/${tour.slug}`));
-//   selectedTour.value = await res.json();
-//   showTourDetail.value = true;
-// };
-
-// const closeTour = () => {
-//   selectedTour.value = null;
-//   showTourDetail.value = false;
-// };
 
 onMounted(() => {
+  console.log('API URL:', import.meta.env.VITE_API_BASE)
   fetchTours();
   handleResize();
   window.addEventListener("resize", handleResize);

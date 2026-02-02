@@ -1,10 +1,10 @@
 <template>
   <div
     id="contact"
-    class="bg-linear-to-r scroll-mt-40 from-indigo-400 to-blue-500 px-4 py-6 sm:px-6 lg:px-8">
+    class="scroll-mt-40 bg-blue-200 px-4 py-8 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
       <div class="mb-4 text-center">
-        <h1 class="font-garamond mb-2 text-2xl font-bold text-white md:text-4xl">
+        <h1 class="font-garamond text-primary text-2xl font-bold sm:text-3xl md:text-4xl">
           Contact Us
         </h1>
       </div>
@@ -46,9 +46,9 @@
         </div>
         <div class="rounded-lg border border-gray-100 bg-white p-8 shadow-xl">
           <h2 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
-            Send us a message
+            Send us a message (NOT YET WORKING)
           </h2>
-          <form class="space-y-2" action="">
+          <form class="space-y-2" action="sendmessage">
             <div class="flex items-start">
               <input
                 type="text"
@@ -82,4 +82,10 @@
     </div>
   </div>
 </template>
-<script setup></script>
+<script setup>
+const sendmessage = () => {
+  // Placeholder function for sending message
+  alert("The contact form is not yet working)");
+};  
+
+</script>

@@ -1,17 +1,33 @@
 <template>
-  <section id="discounts" class="scroll-mt-40 bg-green-100 py-4">
+  <section id="discounts" class="scroll-mt-40 bg-green-100 py-8">
     <main class="container mx-auto px-4">
       <!-- section header -->
       <div class="mb-4 text-center">
-        <h2 class="font-garamond text-primary text-3xl font-bold md:text-4xl">
-          Discounts
-        </h2>
-        <p class="mx-auto max-w-2xl text-lg text-gray-800">
-          <span v-if="tours.length === 0">
-            No tours with discount at the moment
-          </span>
-          <span v-else>Limited time discount for these tours</span>
-        </p>
+        <div class="flex flex-col items-center justify-center md:flex-row">
+          <div>
+            <h2
+              class="font-garamond text-primary text-2xl font-bold sm:text-3xl md:text-4xl">
+              Discounts
+            </h2>
+            <p class="mx-auto max-w-2xl text-lg text-gray-800">
+              <span v-if="tours.length === 0">
+                No tours with discount at the moment
+              </span>
+              <span v-else>Limited time discount for these tours</span>
+            </p>
+          </div>
+          <div class="ml-8 flex flex-row items-center justify-end">
+            <h2 class="">
+              <img
+                :src="assetUrl('/uploads/system/tourist_qrcode.png')"
+                class="max-h-16 sm:max-h-20 md:max-h-24"
+                alt="" />
+            </h2>
+            <p class="mx-auto max-w-2xl text-lg text-gray-800">
+              Scan qr-code for more information
+            </p>
+          </div>
+        </div>
         <nav
           v-if="tours.length > toursPerPage"
           class="flex justify-end space-x-4"
@@ -40,7 +56,7 @@
             <article @click="$emit('open-tour', tour)" class="cursor-pointer">
               <figure class="relative">
                 <img
-                  :src="api('/uploads/resized/' + tour.image)"
+                  :src="assetUrl('/uploads/resized/' + tour.image)"
                   :alt="tour.title"
                   class="h-64 w-full object-cover" />
                 <figcaption
@@ -95,11 +111,14 @@
                       <span
                         v-if="tour.discount > 0"
                         class="mr-2 text-sm text-gray-500 line-through"
-                        >€{{ tour.price.toFixed(2) }}
+                        >€{{ Number(tour.price).toFixed(2) }}
                       </span>
                       <span class="text-lg font-bold text-cyan-600"
                         >€{{
-                          (tour.price * (1 - tour.discount / 100)).toFixed(2)
+                          (
+                            Number(tour.price) *
+                            (1 - tour.discount / 100)
+                          ).toFixed(2)
                         }}</span
                       >
                     </div>
@@ -139,9 +158,10 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { api } from "../api.js";
+import { apiUrl, assetUrl } from "../api.js";
 //  Moved to App.vue
 // import TourDetail from "./TourDetail.vue";
+// const emit = defineEmits(["open-tour"]);
 
 const currentSlide = ref(0);
 const toursPerPage = ref(3);
@@ -181,9 +201,9 @@ const fetchTours = async () => {
   try {
     console.log(
       "Fetching discount tours...",
-      api("/api/public/tours/discounts"),
+      apiUrl("/public/tours/discounts"),
     );
-    const response = await fetch(api("/api/public/tours/discounts"));
+    const response = await fetch(apiUrl("/public/tours/discounts"));
     const json = await response.json();
 
     tours.value = json;

@@ -7,27 +7,27 @@
           ? 'bg-cyan-100/95 backdrop-blur shadow-md py-4'
           : 'bg-cyan-100 py-6',
       ]">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div
-          class="flex h-16 flex-col items-center justify-between gap-3 sm:flex-row md:h-24">
-          <!-- logo + mobile menu toggle-->
-          <div class="flex w-full items-center justify-between md:w-auto">
-            <a href="#home" class="py-2 text-2xl font-bold text-cyan-800">
-              <img
-                :src="api('/uploads/system/logo.gif')"
-                class="h-16 sm:h-20 md:h-24 lg:h-32"
-                alt="" />
-            </a>
-            <button
-              class="text-gray-600 hover:text-cyan-600 sm:hidden"
-              aria-label="Toggle mobile menu"
-              @click="isMobileMenuOpen = !isMobileMenuOpen">
-              <icon icon="mdi:menu" class="h-6 w-6" />
-            </button>
-          </div>
-          <!-- Adress and phone -->
-          <div
-            class="hidden w-full space-y-1 text-right font-serif text-sky-600 md:inline md:w-auto">
+      <div
+        class="mx-auto grid h-16 max-w-full grid-cols-[auto_1fr_auto] items-center gap-4 sm:h-20 md:h-24 lg:h-32">
+        <!-- logo -->
+        <div class="flex items-center justify-start">
+          <a href="#home" class="py-2 text-2xl font-bold text-cyan-800">
+            <img
+              :src="assetUrl('/uploads/system/logo.gif')"
+              class="ml-4 h-16 w-auto sm:h-20 md:h-24 lg:h-32"
+              alt="Jota Logo" />
+          </a>
+        </div>
+        <!-- titel -->
+        <div class="flex justify-center">
+          <h1
+            class="text-primary font-garamond text-left text-2xl sm:text-4xl md:text-6xl lg:text-8xl">
+            Amsterdam Tours
+          </h1>
+        </div>
+        <!-- Adress and phone -->
+        <div class="hidden items-center justify-end gap-6 md:flex">
+          <div class="font-garamond text sky-600 space-y-1 text-right">
             <ul>
               <li
                 v-for="item in adresItems"
@@ -37,27 +37,40 @@
                 <span>{{ item.value }}</span>
               </li>
             </ul>
-          <div class=""><span v-if="backendOnline.status !== 'ok'" class="bg-red-500 px-4 py-2 text-white">BACKEND OFFLINE</span><span v-else>{{ backendOnline.time }}</span></div>
           </div>
-          <!-- Icons -->
-          <aside
-            class="hidden w-full items-center justify-end space-x-4 sm:visible sm:flex md:w-auto">
-            <button
-              class="relative p-2 text-gray-700 hover:text-cyan-600"
-              aria-label="Wishlist">
-              <Icon icon="mdi:cart-outline" class="h-5 w-5" />
-              <span
-                class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white"
-                >5</span
-              >
-            </button>
-            <button
-              class="relative p-2 text-gray-700 hover:text-cyan-600"
-              aria-label="Wishlist">
-              <Icon icon="mdi:account-outline" class="h-5 w-5" />
-            </button>
-          </aside>
+          <div class="">
+            <span
+              v-if="backendOnline.status !== 'ok'"
+              class="bg-red-500 px-4 py-2 text-white"
+              >BACKEND OFFLINE</span
+            ><span v-else>{{ backendOnline.time }}</span>
+          </div>
         </div>
+        <!-- Icons 
+        <aside
+          class="flex items-center space-x-4">
+          <button
+            class="relative p-2 text-gray-700 hover:text-cyan-600"
+            aria-label="Wishlist">
+            <Icon icon="mdi:cart-outline" class="h-5 w-5" />
+            <span
+              class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white"
+              >5</span
+            >
+          </button>
+          <button
+            class="relative p-2 text-gray-700 hover:text-cyan-600"
+            aria-label="Wishlist">
+            <Icon icon="mdi:account-outline" class="h-5 w-5" />
+          </button>
+        </aside>
+        -->
+        <button
+          class="text-gray-600 hover:text-cyan-600 sm:hidden"
+          aria-label="Toggle mobile menu"
+          @click="isMobileMenuOpen = !isMobileMenuOpen">
+          <icon icon="mdi:menu" class="h-6 w-6" />
+        </button>
       </div>
     </section>
     <!-- Navbar links-->
@@ -65,7 +78,7 @@
       <div class="mx-auto flex max-w-7xl justify-between px-4 sm:px-6 lg:px-8">
         <ul
           class="hidden flex-wrap justify-start gap-x-6 py-3 text-sm font-medium text-white sm:flex">
-          <li v-for="item in navItems" :key="item.id" >
+          <li v-for="item in navItems" :key="item.id">
             <a
               v-if="item.loc === 'internal' && item.showItem"
               :href="item.link"
@@ -116,7 +129,14 @@ import { ref, onMounted, onUnmounted } from "vue";
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
 const navItems = [
-  { id: 1, name: "Home", link: "#home", loc: "internal", icon: "mdi:home", showItem: true },
+  {
+    id: 1,
+    name: "Home",
+    link: "#home",
+    loc: "internal",
+    icon: "mdi:home",
+    showItem: true,
+  },
   {
     id: 2,
     name: "Tours",
@@ -173,8 +193,7 @@ const adresItems = [
   { id: 3, type: "email", value: "info@jotatours.nl", icon: "mdi:email" },
 ];
 
-// import jotaLogo from "../img/logo.gif";
-import {api} from "../api.js";
+import { apiUrl,assetUrl } from "../api.js";
 import { Icon } from "@iconify/vue";
 
 const backendOnline = ref({});
@@ -185,9 +204,9 @@ const handleScroll = () => {
 
 onMounted(async () => {
   try {
-    const res = await fetch(api("/api/health"));
+    const res = await fetch(apiUrl("/health"));
     backendOnline.value = await res.json();
-    // console.log("Backend health check response:", backendOnline.value);
+    console.log("Backend health check response:", backendOnline.value);
   } catch (err) {
     backendOnline.value = false;
     // console.log("Backend health check failed:", err);

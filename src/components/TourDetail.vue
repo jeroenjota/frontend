@@ -3,12 +3,12 @@
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
     @click.self="emit('close')">
     <div
-      class="w-full max-w-3xl overflow-hidden rounded-lg border-4 border-blue-500 bg-white p-4 shadow-2xl">
+      class="w-full max-w-3xl overflow-hidden rounded-lg border-4 border-blue-500 bg-sky-100 p-4 shadow-2xl">
       <div class="flex flex-col gap-2 md:flex-row md:justify-center">
-        <div class="justify-left flex items-center bg-white">
+        <div class="justify-left flex items-center bg-sky-100">
           <!-- CAROUSEL -->
           <div
-            class="relative w-full overflow-hidden bg-white p-2"
+            class="relative w-full overflow-hidden bg-sky-100 p-2"
             @mouseenter="stopAutoplay"
             @mouseleave="autoplay && startAutoplay()">
             <!-- Loading state -->
@@ -21,9 +21,9 @@
             <!-- Foto -->
             <div
               v-else
-              class="flex aspect-video w-full items-center justify-center bg-white">
+              class="flex aspect-video w-full items-center justify-center">
               <img
-                :src="api('/uploads/original/' + fotos[current].filename)"
+                :src="assetUrl('/uploads/original/' + fotos[current].filename)"
                 width="600"
                 height="400"
                 class="max-h-full object-contain" />
@@ -70,16 +70,18 @@
         <div class="flex flex-1 flex-col p-4">
           <h3 class="font-semibold">
             Max:
-            <span class="text-lg font-medium"
-              >{{ tour.maxpers  }} ppl</span
-            >
+            <span class="text-lg font-medium">{{ tour.maxpers }} ppl</span>
           </h3>
           <p class="mb-4 font-semibold">
-            Book @ 
-              <a :href="tour.tblLink" class="text-lg font-medium" target="_blank"
-              ><img src="../img/tbl_logo.png" alt="ToursByLocals" class="h-18 ml-2 inline" />
+            More info:
+            <a
+              :href="`mailto:jeroen@jota.nl?subject=${encodeURIComponent(
+                'Tour Inquiry: ' + tour.title,
+              )}`"
+              class="text-blue-600 underline">
+              Email us
             </a>
-          </p>
+            </p>
           <!-- details -->
           <div class="mb-4 w-full">
             <h3 class="mb-2 font-semibold">
@@ -87,11 +89,11 @@
               <span
                 v-if="tour.discount > 0"
                 class="mr-2 text-gray-500 line-through"
-                >€{{ tour.price.toFixed(2) }}</span
+                >€{{ Number(tour.price).toFixed(2) }}</span
               >
               <span class="font-bold text-cyan-600"
                 >€{{
-                  (tour.price * (1 - tour.discount / 100)).toFixed(2)
+                  (Number(tour.price) * (1 - tour.discount / 100)).toFixed(2)
                 }}</span
               >
             </h3>
@@ -108,12 +110,18 @@
           {{ tour.description }}
         </p>
       </div>
-      <div class="w-full bg-gray-100 px-4 py-2">
-        <p>{{ tour.content }}</p>
+      <div class="max-h-60 overflow-y-auto">
+        <div
+          class="prose prose-a:text-blue-600 hover:prose-a:text-blue-800 prose-ul:list-none prose-ul:pl-0 w-full max-w-none bg-gray-100 px-4 py-2"
+          v-html="tour.content"></div>
       </div>
-      <div class="mb-4 grid w-full grid-cols-2 gap-2 bg-gray-200 px-4 py-2 text-sm font-extralight md:grid-cols-4">
-        <span v-for="category in categories" :key="category.id">{{ category.name }}</span>
-        </div>
+      <div
+        class="mb-4 mt-2 grid w-full grid-cols-2 gap-2 bg-gray-200 px-4 py-2 text-sm font-extralight text-blue-700 sm:grid-cols-3 md:grid-cols-4">
+        <span v-for="category in categories" :key="category.id"
+          >{{ category.name }}
+          <CheckIcon class="inline h-4 w-4 text-blue-600" />
+        </span>
+      </div>
       <div class="p-4 text-right">
         <button
           class="rounded bg-blue-600 px-4 py-2 text-white"
@@ -127,7 +135,9 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
-import { api } from "../api.js";
+import { apiUrl,assetUrl } from "../api.js";
+import DOMpurify from "dompurify";
+import { CheckBadgeIcon, CheckIcon } from "@heroicons/vue/16/solid";
 const props = defineProps({
   tour: {
     type: Object,
@@ -147,18 +157,18 @@ let timer = null;
 
 const fetchCategories = async () => {
   try {
-    const res = await fetch(api(`/api/public/tours/${props.tour.id}/categories`));
+    const res = await fetch(apiUrl(`/public/tours/${props.tour.id}/categories`));
     categories.value = await res.json();
   } catch (e) {
     console.error("Error fetching categories:", e);
   }
-};  
+};
 
 const fetchFotos = async () => {
   loading.value = true;
   try {
     // console.log("Fetching fotos for tour ID:", props.tour.id);
-    const res = await fetch(api(`/api/public/tours/${props.tour.id}/photos`));
+    const res = await fetch(apiUrl(`/public/tours/${props.tour.id}/photos`));
 
     fotos.value = await res.json();
     current.value = 0;
@@ -192,6 +202,8 @@ const stopAutoplay = () => {
 
 // escape-to-close
 onMounted(() => {
+  const safeContent = DOMpurify.sanitize(props.tour.content) || "";
+  props.tour.content = safeContent;
   fetchFotos();
   fetchCategories();
 });
@@ -215,7 +227,6 @@ watch(
     fotos.value = [];
     fetchFotos();
   },
-  { immediate: true }
+  { immediate: true },
 );
-
 </script>

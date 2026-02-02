@@ -10,7 +10,7 @@
           class="mb-4 flex items-center justify-between border-b border-gray-300 p-4">
           <h1
             class="border-b-4 border-blue-500 text-2xl text-blue-600 md:text-3xl">
-            {{ category?.name }} tours
+            {{ firstWord(category?.name)   }} tours
           </h1>
           <button
             @click="emit('close')"
@@ -40,7 +40,7 @@
                   <div
                     class="relative flex h-48 w-full shrink-0 items-center justify-center overflow-hidden bg-white md:h-40 md:w-56">
                     <img
-                      :src="api('/uploads/resized/' + tour.image)"
+                      :src="assetUrl('/uploads/resized/' + tour.image)"
                       :alt="tour.title"
                       class="h-full w-full object-cover" />
                   </div>
@@ -61,7 +61,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import { api } from "../api.js";
+import { apiUrl, assetUrl } from "../api.js";
 
 const emit = defineEmits(["close", "open-tour"]);
 
@@ -77,7 +77,7 @@ const categoryTours = ref([]);
 
 const fetchCategory = async (id) => {
   try {
-    const response = await fetch(api("/api/public/categories/" + id));
+    const response = await fetch(apiUrl("/public/categories/" + id));
     const json = await response.json();
     category.value = json;
   } catch (error) {
@@ -87,7 +87,7 @@ const fetchCategory = async (id) => {
 
 const fetchToursByCategory = async (id) => {
   try {
-    const response = await fetch(api(`/api/public/tours/category/${id}`));
+    const response = await fetch(apiUrl(`/public/tours/category/${id}`));
     const json = await response.json();
     // console.log("Fetched tours for category", id, ":", json);
     categoryTours.value = json;
@@ -95,6 +95,11 @@ const fetchToursByCategory = async (id) => {
     console.error("Error fetching tours for category:", error);
   }
 };
+
+function firstWord(tekst) {
+  if (!tekst) return "";
+  return tekst.split(" ")[0];
+} 
 
 onMounted(() => {
   fetchCategory(props.categoryId);

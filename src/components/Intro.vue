@@ -1,24 +1,26 @@
 <template>
-  <section id="intro" class="scroll-mt-40 bg-green-100 py-4">
-    <main class="container mx-auto px-4">
+  <section id="intro" class="bg-transparent">
+    <main class="h-full flex-1 overflow-y-auto overscroll-contain">
       <!-- section header -->
       <div class="mb-4 text-center">
-        <h2 class="font-garamond text-primary text-2xl font-bold md:text-4xl">
+        <h2 class="font-garamond text-primary text-xl font-bold sm:text-2xl md:text-3xl">
           Welcome to Jota Services
         </h2>
-        <p class="mb-2 mt-4 text-2xl text-gray-900">
-          Jota Services focuses on offering unique and personalized tours in the
-          Netherlands.
-        </p>
-        <div class="bg-green-100 text-xl text-green-900">
-          <p>Please be aware that this website is still under construction</p>
-          <p>
-            For now, you can only book the various tours through ToursByLocals,
-            but that will change in the future.
+        
+        <div class="text-primary font-garamond mt-2 px-4 sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
+          <p >
+            Jota Services focuses on offering unique and personalized tours in the
+            Netherlands.
           </p>
+          <div class="mt-2 rounded-md border-2 border-red-900 bg-red-100/50 p-1 text-red-900">
+            <p class="font-bold">Please note that this website is still under construction</p>
+            <p>
+              You can not book the various tours through this site yet.
+            </p>
+          <p class="font-garamond"> Please <a href="mailto:info@jota.nl" class="underline hover:text-red-700">contact me directly</a> if you want to book any of the mentioned tours.</p>
+          </div>
         </div>
       </div>
     </main>
   </section>
 </template>
-<script setup></script>
