@@ -11,29 +11,26 @@
       <p class="text-xl leading-relaxed md:text-3xl">
         {{ text[0] }}
       </p>
+      <!-- Foto jeroen -->
       <img
         class="float-right mb-4 ml-4 w-48 rounded-full"
         :src="myHead"
         alt="" />
-      <!-- Carousel rechts met tekst eromheen -->
 
       <p class="text-lg leading-relaxed">
         {{ text[1] }}
       </p>
-      <p class="text-lg leading-relaxed">
-        {{ text[2] }}
+      <p class="mb-6 text-lg leading-relaxed">
+        {{ text[2] }} 
       </p>
-
-      <p class="text-lg leading-relaxed">
-        {{ text[3] }}
-      </p>
-
-      <!-- Tekst loopt er omheen -->
-      <p class="text-lg leading-relaxed">{{ text[4] }}</p>
-      <div class="relative">
-        <!-- Carousel -->
+        <p class="text-lg">
+          {{ text[3] }}
+        </p>
+      <!-- Carousel rechts met tekst eromheen -->
+      <div class="relative mt-6">
+        <p class="text-lg leading-relaxed">{{ text[4] }}</p>
         <div
-          class="float-left mb-4 mr-6 w-full overflow-hidden rounded-2xl shadow-xl sm:w-1/2 md:w-1/3 lg:w-1/4">
+          class="float-left mr-4 mt-2 w-full overflow-hidden rounded-2xl shadow-xl sm:w-1/2 md:w-1/3 lg:w-1/4">
           <div class="relative h-96 w-full">
             <transition name="fade" mode="out-in">
               <img
@@ -52,14 +49,16 @@
             </div>
           </div>
         </div>
-      <p class="mt-4 text-lg leading-relaxed">
-        {{ text[5] }}
-      </p>
-      <p class="mt-4 text-lg leading-relaxed">{{ text[6] }}</p>
+        <p class="mt-4 text-lg leading-relaxed">
+          {{ text[5] }}
+        </p>
+
+        <p class="mt-4 text-lg leading-relaxed">{{ text[6] }}</p>
         <p class="mt-4 text-lg leading-relaxed">{{ text[7] }}</p>
-        <p class="mt-4 text-lg leading-relaxed">{{ text[8] }}</p>
+        <!-- Carousel -->
       </div>
     </div>
+        <p class="mt-4 text-lg leading-relaxed">{{ text[8] }}</p>
   </div>
 </template>
 
@@ -72,16 +71,16 @@ const text = [
   //  1
   "Hello, nice to meet you! My name is Jeroen (Jerome),",
   // 2
-  "I am a professional guide in Amsterdam and North-Holland and I am looking forward to meeting you and take you on a tour to discover the Netherlands like never before. You will love the experience!",
+  "I am a professional, licenced guide in Amsterdam and North-Holland and I am looking forward to meeting you and take you on a tour to discover the Netherlands like never before. You will love the experience!",
   " I was born in Amsterdam in 1956 and, although I have lived in many other cities and countries when I was younger, Amsterdam has always been my home.",
   // 3
   "The unique history and atmosphere are inseparably connected to each other, and I am always on the lookout for new facts and stories about the city. Learning about Amsterdam and its famous history also triggered the curiosity about other parts of this so-called Low Holland area. The fascinating way this small country created the world's biggest marine and trade fleet in the 17th century is one of the things that makes this area so special. Although I do feel some pride about this fact, I am also very much aware that there have been - and still are - many situations where the human factor was less important than financial gain. And I do think that this part of the story also has to be told.",
   // 4
   "Before being a guide, I was a bar owner in the Amsterdam district 'de Jordaan'. I loved that work, making people feel happy and relaxed has always been something that comes natural to me. But after 15 years, it was time for a new episode. Before running the bar, I was a computer programmer, a teacher, an actor and a tourist guide in France. With the experience and the knowledge I acquired over the years, the step to becoming a tourist guide in my hometown was a natural one. ",
   // 5
-  "I have been giving tours for different sort of groups, in four different languages, at different locations in and around Amsterdam since 2017. And according to the reviews, my guests have always enjoyed themselves very much.. Being an ex-bartender and an ex-teacher, I am always in for a joke and a laugh. Life is too serious as it is 🙂",
+  "I have been giving tours for different kinds of groups, in four different languages, at different locations in and around Amsterdam since 2017. And according to the reviews, my guests have always enjoyed themselves very much.. Being an ex-bartender and an ex-teacher, I am always in for a joke and a laugh. Life is too serious as it is 🙂",
   // 6
-  "I speak English as good as fluently, which is not exceptional in the Netherlands. Because I lived in the south of France for two years, my French is also pretty good. And, not too difficult for a Dutchman, I speak German reasonably well too, although the grammar is a bit 'rusty'. Besides those languages I am trying to learn Spanish, but I am not yet at a 'tour-giving' level 🤫",
+  "I speak English as good as fluently, which is not exceptional in the Netherlands. Because I lived in the south of France for two years, my French is also pretty good. And, not too difficult for a Dutchman, I also speak German reasonably well, although the grammar is a bit 'rusty'. Besides those languages I am trying to learn Spanish, but I don't think I am yet at a 'tour-giving' level 🤫",
   // 7
   "I am married and have two grown-up sons. I still live in the heart of the city, in Amsterdam, I couldn't live anywhere else.",
   "I hope to get to know you very soon and to share some of my stories with you. If there is one of my tour you like, but you want some adjustments, or if you want to combine two tours or subjects, just reach out and I will prepare a customized tour for you.",

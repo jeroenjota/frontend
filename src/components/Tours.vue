@@ -43,11 +43,11 @@
                   -{{ tour.discount }}% OFF
                 </figcaption>
 
-                <button
+                <!-- <button
                   class="absolute left-3 top-3 rounded-full bg-white p-2 text-gray-700 shadow-md hover:bg-cyan-100"
                   aria-label="Add to wishlist">
                   <Icon icon="line-md:heart" width="18" height="18" />
-                </button>
+                </button> -->
                 <section class="bg-sky-100 p-4">
                   <div class="flex items-center">
                     <Icon
