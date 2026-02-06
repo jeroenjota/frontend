@@ -92,7 +92,6 @@ const submitForm = async () => {
   loading.value = true;
 
   try {
-    // fetch(apiUrl("/public/tours"));
     const res = await fetch(apiUrl("/public/contact"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },

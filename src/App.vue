@@ -38,7 +38,7 @@ const selectedTour = ref(null);
 const showTourDetail = ref(false);
 
 function openTour(tour) {
-  console.log("Opening tour:", tour);
+  // console.log("Opening tour:", tour);
   selectedTour.value = tour;
   showTourDetail.value = true;
 }

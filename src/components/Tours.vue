@@ -175,7 +175,7 @@ const fetchTours = async () => {
   try {
     const response = await fetch(apiUrl("/public/tours"));
     const json = await response.json();
-    console.log("Fetched tours data:", json);
+    // console.log("Fetched tours data:", json);
     tours.value = json;
   } catch (error) {
     console.error("Error fetching tours:", error);
@@ -184,7 +184,7 @@ const fetchTours = async () => {
 
 
 onMounted(() => {
-  console.log('API URL:', import.meta.env.VITE_API_BASE)
+  // console.log('API URL:', import.meta.env.VITE_API_BASE)
   fetchTours();
   handleResize();
   window.addEventListener("resize", handleResize);

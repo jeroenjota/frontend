@@ -206,7 +206,7 @@ onMounted(async () => {
   try {
     const res = await fetch(apiUrl("/health"));
     backendOnline.value = await res.json();
-    console.log("Backend health check response:", backendOnline.value);
+    // console.log("Backend health check response:", backendOnline.value);
   } catch (err) {
     backendOnline.value = false;
     // console.log("Backend health check failed:", err);
