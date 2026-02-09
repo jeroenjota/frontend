@@ -1,5 +1,5 @@
 <template>
-  <section id="tours" class="scroll-mt-40 bg-cyan-100 py-8">
+  <section id="tours" class="scroll-mt-40 bg-cyan-100 py-8" >
     <main class="container mx-auto px-4">
       <!-- Section Header -->
       <header class="mb-4 text-center">
@@ -26,7 +26,7 @@
       </header>
       <section class="relative overflow-hidden">
         <ul
-          class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          class="grid grid-cols-1 grid-rows-4 gap-6 sm:grid-cols-2 sm:grid-rows-2 md:grid-cols-3 lg:grid-cols-4">
           <li
             v-for="tour in visibleTours"
             :key="tour.id"
@@ -62,7 +62,7 @@
                           : 'text-gray-300'
                       " />
                     <span class="ml-1 text-sm text-gray-500"
-                      >({{ tour.rating }})</span
+                      >({{ Number(tour.rating).toFixed(1) }})</span
                     >
                   </div>
                   <div class="my-2 border-b border-t">
@@ -132,11 +132,14 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { apiUrl,assetUrl } from "../api.js";
+import { apiUrl } from "../api.js";
 // import TourDetail from "./TourDetail.vue";
+import { assetUrl } from "../api";
+const fotoUrl = assetUrl;
+
 
 const currentSlide = ref(0);
-const toursPerPage = ref(4);
+const toursPerPage = ref(8);
 const tours = ref([]);
 
 const totalSlides = computed(() => {
@@ -144,7 +147,7 @@ const totalSlides = computed(() => {
 });
 
 const visibleTours = computed(() => {
-  const start = currentSlide.value * toursPerPage.value;
+  const start = currentSlide.value * toursPerPage.value/2;
   const tourSet = tours.value.slice(start, start + toursPerPage.value);
   return tourSet;
 });
@@ -161,13 +164,13 @@ const prevSlide = () => {
 const handleResize = () => {
   const width = window.innerWidth;
   if (width < 640) {
-    toursPerPage.value = 1;
-  } else if (width >= 640 && width < 768) {
     toursPerPage.value = 2;
-  } else if (width >= 768 && width < 1024) {
-    toursPerPage.value = 3;
-  } else {
+  } else if (width >= 640 && width < 768) {
     toursPerPage.value = 4;
+  } else if (width >= 768 && width < 1024) {
+    toursPerPage.value = 6;
+  } else {
+    toursPerPage.value = 8;
   }
 };
 

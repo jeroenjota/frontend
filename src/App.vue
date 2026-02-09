@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <button
-      @click="scrollToTop"
-      class="sm:top-1/7 fixed right-4 z-50 rounded-full bg-sky-600 px-4 py-2 text-white shadow-lg transition hover:bg-sky-700">
-      ↑ to top
-    </button>
+  <div  class="min-h-screen bg-cover bg-center">
     <Header />
     <Home />
    <!-- <Intro /> -->
@@ -33,7 +28,8 @@ import Offers from "./components/Offers.vue";
 import About from "./components/About.vue";
 import Contact from "./components/Contact.vue";
 import Foot from "./components/Foot.vue";
-
+import { assetUrl } from "./api";
+const fotoUrl = assetUrl;
 const selectedTour = ref(null);
 const showTourDetail = ref(false);
 

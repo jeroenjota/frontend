@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 
 export const contactForm = reactive({
+  title: '',
   name: '',
   surname: '',
   language: '',
