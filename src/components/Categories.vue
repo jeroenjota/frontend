@@ -1,6 +1,6 @@
 <template>
   <section id="categories" class="scroll-mt-40 bg-sky-200 py-8">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto max-w-7xl px-4">
       <!-- Section Header -->
       <div class="mb-4 text-center">
         <h2 class="font-garamond text-primary text-2xl font-bold sm:text-3xl md:text-4xl">

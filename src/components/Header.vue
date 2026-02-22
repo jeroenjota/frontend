@@ -190,7 +190,7 @@ const navItems = [
 const adresItems = [
   { id: 1, type: "phone", value: "(+31) 6 4711 6541", icon: "mdi:phone" },
   { id: 2, type: "location", value: "Amsterdam", icon: "mdi:map-marker" },
-  { id: 3, type: "email", value: "info@jotatours.nl", icon: "mdi:email" },
+  { id: 3, type: "email", value: "info@jota.nl", icon: "mdi:email" },
 ];
 
 import { apiUrl,assetUrl } from "../api.js";

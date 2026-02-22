@@ -1,17 +1,20 @@
-import { reactive } from 'vue'
+// src/composables/useContactForm.js
+import { reactive } from "vue";
 
-export const contactForm = reactive({
-  title: '',
-  name: '',
-  surname: '',
-  language: '',
-  phone: '',
-  country: '',
-  email: '',
-  message: '',
-  tourId: null,
-  tourTitle: '',
-  preferredDate: '',
-  groupSize: 1,
-  company: '' // honeypot, verborgen veld als hier iets is ingevuld is het een bot!
-})
+export function createContactForm() {
+  return reactive({
+    title: "",
+    name: "",
+    surname: "",
+    language: "",
+    phone: "",
+    country: "",
+    email: "",
+    message: "",
+    tourId: null,
+    tourTitle: "",
+    preferredDate: "",
+    groupSize: 1,
+    company: "", // honeypot
+  });
+}

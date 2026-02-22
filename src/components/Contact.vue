@@ -134,9 +134,9 @@
 </template>
 <script setup>
 import { apiUrl } from "../api.js";
-import { contactForm } from "../composables/useContactForm";
+import { createContactForm } from "../composables/useContactForm";
 import { ref } from "vue";
-
+const contactForm = createContactForm();
 const loading = ref(false);
 const success = ref(false);
 const error = ref(null);

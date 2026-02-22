@@ -3,7 +3,7 @@
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
     @click.self="emit('close')">
     <div
-      class="max-h-[95] rounded-lg border-4 border-blue-500 bg-sky-100 p-2 shadow-2xl sm:max-h-[85vh]">
+      class="max-h-[95vh] rounded-lg border-4 border-blue-500 bg-sky-100 p-2 shadow-2xl sm:max-h-[85vh]">
       <div
         class="max-w-200 max-h-[75vh] w-full overflow-hidden overflow-y-auto overscroll-contain rounded-lg bg-sky-100 shadow-2xl sm:max-h-[75vh]">
         <div class="flex flex-col gap-2 md:flex-row md:justify-center">
@@ -143,23 +143,16 @@
       <div class="flex flex-row items-center justify-between gap-4 bg-sky-100">
         <div class="p-4 text-right">
           <button
-            class="bg-primary rounded px-4 py-2 text-white"
-            @click="showMailForm = !showMailForm">
+            class="bg-primary rounded px-4 py-2 text-white hover:bg-sky-900"
+            @click="openMailForm">
             <InformationCircleIcon class="inline h-5 w-5" />
             Info request
-            <!-- <a
-                    :href="`mailto:jeroen@jota.nl?subject=${encodeURIComponent(
-                      'Tour Inquiry: ' + tour.title,
-                    )}`"
-                    class="text-blue-600 underline">
-                    Email us
-                  </a> -->
           </button>
         </div>
 
         <div class="p-4 text-right">
           <button
-            class="bg-primary rounded px-4 py-2 text-white"
+            class="bg-primary rounded px-4 py-2 text-white hover:bg-sky-900"
             @click="emit('close')">
             Sluiten
           </button>
@@ -217,7 +210,7 @@ const fetchCategories = async () => {
       apiUrl(`/public/tours/${props.tour.id}/categories`),
     );
     categories.value = await res.json();
-    console.log("Fetched categories:", categories.value);
+    // console.log("Fetched categories:", categories.value);
   } catch (e) {
     console.error("Error fetching categories:", e);
   }
@@ -257,6 +250,11 @@ const startAutoplay = () => {
 const stopAutoplay = () => {
   clearInterval(timer);
   timer = null;
+};
+
+const openMailForm = () => {
+  // console.log("Opening mail form for tour:", props.tour.title);
+  showMailForm.value = true;
 };
 
 // escape-to-close

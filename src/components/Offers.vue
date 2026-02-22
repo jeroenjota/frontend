@@ -1,6 +1,6 @@
 <template>
   <section id="discounts" class="scroll-mt-40 bg-green-100 py-8">
-    <main class="container mx-auto px-4">
+    <main class="container mx-auto max-w-7xl px-4">
       <!-- section header -->
       <div class="mb-4 text-center">
         <div class="flex flex-col items-center justify-center md:flex-row">

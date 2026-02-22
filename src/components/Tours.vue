@@ -1,6 +1,6 @@
 <template>
   <section id="tours" class="scroll-mt-40 bg-cyan-100 py-8" >
-    <main class="container mx-auto px-4">
+    <main class="container mx-auto max-w-7xl px-4">
       <!-- Section Header -->
       <header class="mb-4 text-center">
         <h2 class="font-garamond text-primary text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">

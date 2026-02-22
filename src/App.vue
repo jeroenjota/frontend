@@ -1,11 +1,11 @@
 <template>
-  <div  class="min-h-screen bg-cover bg-center">
+  <div class="min-h-screen bg-cover bg-center">
     <Header />
     <Home />
-   <!-- <Intro /> -->
+    <!-- <Intro /> -->
     <Tours @open-tour="openTour" />
     <Categories @open-tour="openTour" />
-    <Offers @open-tour="openTour"/>
+    <Offers @open-tour="openTour" />
     <About />
     <Contact />
     <Foot />
@@ -14,6 +14,14 @@
       :key="selectedTour?.id"
       :tour="selectedTour"
       @close="closeTour" />
+    <main class="container mx-auto px-4 py-8">
+      <button
+        class="bg-primary hover:bg-primary/80 fixed bottom-4 right-4 rounded-full p-3 text-white shadow-lg transition-colors"
+        @click="scrollToTop"
+        aria-label="Scroll to top">
+        ↑
+      </button>
+    </main>
   </div>
 </template>
 <script setup>
@@ -29,9 +37,12 @@ import About from "./components/About.vue";
 import Contact from "./components/Contact.vue";
 import Foot from "./components/Foot.vue";
 import { assetUrl } from "./api";
+
 const fotoUrl = assetUrl;
 const selectedTour = ref(null);
 const showTourDetail = ref(false);
+
+const showTerms = ref(false);
 
 function openTour(tour) {
   // console.log("Opening tour:", tour);
