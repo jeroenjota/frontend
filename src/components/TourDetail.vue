@@ -43,16 +43,6 @@
                     aria-label="Vorige foto">
                     <span class="text-2xl leading-none">‹</span>
                   </button>
-                  <!-- Dots
-                  <div class="flex gap-2">
-                    <button
-                      v-for="(f, i) in fotos"
-                      :key="i"
-                      class="h-2.5 w-2.5 rounded-full transition"
-                      :class="i === current ? 'bg-blue-400' : 'bg-gray-300'"
-                      @click="current = i" />
-                  </div>
-                  -->
                   <!-- Play / Pause -->
                   <button
                     class="flex h-9 w-9 items-center justify-center rounded text-gray-600 transition hover:bg-gray-300 hover:text-gray-900"
@@ -125,9 +115,14 @@
                   <!-- <CheckIcon class="inline h-4 w-4 text-blue-600" /> -->
                 </span>
               </div>
-          <p class="mb-4 whitespace-pre-line">
-            {{ tour.description }}
-          </p>
+              <p class="mb-4 whitespace-pre-line">
+                {{ tour.description }}
+              </p>
+              <AvailabilityCalendar
+                v-if="tour && tour.fromDate && tour.tillDate"
+                :tour-id="tour.id"
+                :from-date="tour.fromDate"
+                :till-date="tour.tillDate" />
             </div>
           </div>
         </div>
@@ -173,6 +168,7 @@ import { apiUrl, assetUrl } from "../api.js";
 import DOMpurify from "dompurify";
 import { CheckIcon, InformationCircleIcon } from "@heroicons/vue/16/solid";
 import ContactForm from "./ContactForm.vue";
+import AvailabilityCalendar from "./AvailabilityCalendar.vue";
 const props = defineProps({
   tour: {
     type: Object,
@@ -257,15 +253,28 @@ const openMailForm = () => {
   showMailForm.value = true;
 };
 
+function handleKeydown(event) {
+  // voorlopig niets, voorkomt de fout
+}
+
 // escape-to-close
 onMounted(() => {
   const safeContent = DOMpurify.sanitize(props.tour.content) || "";
   props.tour.content = safeContent;
+  props.tour.fromDate = props.tour.fromDate || "2024-01-01";
+  props.tour.tillDate = props.tour.tillDate || "2099-12-31";
+  const handleKeydown = (e) => {
+    if (e.key === "Escape") {
+      emit("close");
+    }
+  };
+  window.addEventListener("keydown", handleKeydown);
   fetchFotos();
   fetchCategories();
 });
 
 onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeydown);
   stopAutoplay();
 });
 

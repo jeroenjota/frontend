@@ -11,7 +11,7 @@
           possible.
         </p>
         <p class="text-sm text-gray-600">
-          Except surname and email, everything is optional, but it will help if
+          First name, surname, and email are required, but it will help if
           you provide as much information as possible
         </p>
         <form
@@ -26,21 +26,13 @@
               :style="{ width: progress + '%' }"></div>
           </div>
           <!-- Naam -->
-          <div class="grid gap-4 sm:grid-cols-5">
-            <select
-              v-model="contactForm.title"
-              class="h-10 rounded-lg border-gray-200 px-2 focus:ring-2 focus:ring-sky-500">
-              <option value="">Title</option>
-              <option>Mr</option>
-              <option>Mrs</option>
-              <option>Ms</option>
-              <option>Dr</option>
-            </select>
+          <div class="grid gap-4 sm:grid-cols-4">
 
             <div class="sm:col-span-1">
               <label class="form-label">First name</label>
               <input
                 v-model="contactForm.name"
+                required
                 type="text"
                 class="form-input" />
             </div>
@@ -53,15 +45,14 @@
                 required
                 class="form-input" />
             </div>
-            <div class="sm:col-span-1">
-              <label class="form-label">Group size</label>
+            <div>
+              <label class="form-label">Country</label>
               <input
-                v-model.number="contactForm.groupSize"
-                type="number"
-                min="1"
-                placeholder="Number of people"
+                v-model="contactForm.country"
+                type="text"
                 class="form-input" />
             </div>
+
           </div>
           <div class="grid gap-4 sm:grid-cols-4">
             <!--  Email -->
@@ -89,17 +80,18 @@
                 class="form-input" />
             </div>
           </div>
-          <div class="grid gap-4 sm:grid-cols-3">
-            <!-- Herkomst & taal -->
-            <div>
-              <label class="form-label">Country</label>
+          <!-- Tour details -->
+          <div class="grid gap-4 sm:grid-cols-5">
+            <div class="sm:col-span-1">
+              <label class="form-label">Group size</label>
               <input
-                v-model="contactForm.country"
-                type="text"
+                v-model.number="contactForm.groupSize"
+                type="number"
+                min="1"
+                placeholder="Number of people"
                 class="form-input" />
             </div>
-
-            <div>
+            <div class="sm:col-span-2">
               <label class="form-label">Preferred language</label>
               <select v-model="contactForm.language" class="form-input">
                 <option disabled value="">Select a language</option>
@@ -111,8 +103,7 @@
               </select>
             </div>
 
-            <!-- Tour details -->
-            <div class="sm:col-span-1">
+            <div class="sm:col-span-2">
               <div>
                 <label class="form-label">Preferred date</label>
                 <input
