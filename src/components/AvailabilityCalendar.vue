@@ -1,55 +1,82 @@
 <template>
   <div class="space-y-4">
 
-    <!-- Month navigation -->
-    <div class="mb-2 flex items-center justify-between">
-      <button @click="prevMonth" class="rounded bg-gray-200 px-3 py-1">Prev</button>
-      <h2 class="text-lg font-semibold">
-        {{ currentMonthName }} {{ currentYear }}
-      </h2>
-      <button @click="nextMonth" class="rounded bg-gray-200 px-3 py-1">Next</button>
-    </div>
+    <!-- STEP 1: MAANDOVERZICHT -->
+    <div v-if="!selectedDate">
 
-    <!-- Calendar grid -->
-    <div class="grid grid-cols-7 gap-1 text-center">
-      <!-- Weekdays -->
-      <div class="font-semibold" v-for="d in weekdays" :key="d">{{ d }}</div>
+      <!-- Month navigation -->
+      <div class="mb-2 flex items-center justify-between">
+        <button @click="prevMonth" class="rounded bg-gray-200 px-3 py-1">Prev</button>
+        <h2 class="text-lg font-semibold">
+          {{ currentMonthName }} {{ currentYear }}
+        </h2>
+        <button @click="nextMonth" class="rounded bg-gray-200 px-3 py-1">Next</button>
+      </div>
 
-      <!-- Days -->
-      <template v-for="(day, idx) in monthDays" :key="idx">
-        <div v-if="day"
-             @click="selectDay(day)"
-             :class="dayClass(day)">
-          {{ day.getDate() }}
+      <!-- Calendar grid -->
+      <div class="grid grid-cols-7 gap-1 text-center">
+        <div class="font-semibold" v-for="d in weekdays" :key="d">
+          {{ d }}
         </div>
-        <div v-else></div>
-      </template>
+
+        <template v-for="(day, idx) in monthDays" :key="idx">
+          <div v-if="day"
+               @click="selectDay(day)"
+               :class="dayClass(day)">
+            {{ day.getDate() }}
+          </div>
+          <div v-else></div>
+        </template>
+      </div>
+
     </div>
 
-    <!-- Loading -->
-    <div v-if="loading" class="mt-2">Checking availability...</div>
 
-    <!-- Available times -->
-    <div v-if="availableTimes.length" class="mt-2">
-      <h3 class="font-semibold">Available start times:</h3>
-      <div class="mt-2 grid grid-cols-3 gap-2">
-        <button v-for="time in availableTimes" :key="time"
-                class="rounded bg-green-500 p-2 text-white hover:bg-green-600">
+    <!-- STEP 2: BESCHIKBARE TIJDEN -->
+    <div v-else>
+
+      <!-- Geselecteerde datum -->
+      <h2 class="mb-0 text-center font-semibold">
+        Availability for
+      </h2>
+      <h2 class="mb-2 text-center font-semibold">
+        {{ selectedDateFormatted }}
+      </h2>
+
+      <!-- Loading -->
+      <div v-if="loading">Checking availability...</div>
+
+      <!-- Beschikbare tijden -->
+      <div v-if="availableTimes.length" class="mt-2 grid grid-cols-3 gap-2">
+        <button
+          v-for="time in availableTimes"
+          :key="time"
+          @click="selectTime(time)"
+          class="rounded bg-green-500 p-2 text-white hover:bg-green-600">
           {{ time }}
         </button>
       </div>
-    </div>
 
-    <div v-else-if="selectedDate && !loading" class="mt-2">
-      No availability on this date.
+      <div v-else-if="!loading">
+        No availability on this date.
+      </div>
+      <!-- Terug knop -->
+      <button
+        @click="goBack"
+        class="button mt-4 rounded-2xl bg-blue-600 px-4 py-1 text-lg text-blue-100 hover:underline">
+        ← Back to calendar
+      </button>
     </div>
 
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
-import { apiUrl } from '../api.js';
+import { ref, computed, watch, onMounted } from "vue";
+import { apiUrl } from "../api.js";
+
+const emit = defineEmits(["select-time"]);
+
 
 const props = defineProps({
   tourId: { type: Number, required: true },
@@ -64,21 +91,31 @@ const availableTimes = ref([]);
 const loading = ref(false);
 const monthAvailability = ref({}); // { 'YYYY-MM-DD': true/false }
 
+
+const selectedTime = ref(null)
+
+function selectTime(time) {
+  selectedTime.value = time
+  emit("select-time", { date: selectedDate.value, time });
+}
+
 // Weekdays labels
-const weekdays = ['M','Tu','W','Th','F','Sa','Su'];
+const weekdays = ["M", "Tu", "W", "Th", "F", "Sa", "Su"];
 
 // -------------------- Helpers --------------------
 function formatDate(date) {
   const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2,'0');
-  const d = String(date.getDate()).padStart(2,'0');
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
 }
 
 // Month / Year
 const currentYear = computed(() => current.value.getFullYear());
 const currentMonth = computed(() => current.value.getMonth());
-const currentMonthName = computed(() => current.value.toLocaleString('default',{ month: 'long' }));
+const currentMonthName = computed(() =>
+  current.value.toLocaleString("default", { month: "long" }),
+);
 
 // Tour min/max dates
 const minDate = new Date(props.fromDate);
@@ -122,40 +159,44 @@ async function fetchMonthAvailability() {
   }
 
   const availability = {};
-  await Promise.all(daysToCheck.map(async dateStr => {
-    try {
-      const res = await fetch(apiUrl(`/public/availability?date=${dateStr}&tourId=${props.tourId}`));
-      const data = await res.json();
-      availability[dateStr] = data.length > 0; // true = boekbaar
-    } catch (err) {
-      console.error(err);
-      availability[dateStr] = false;
-    }
-  }));
+  await Promise.all(
+    daysToCheck.map(async (dateStr) => {
+      try {
+        const res = await fetch(
+          apiUrl(`/public/availability?date=${dateStr}&tourId=${props.tourId}`),
+        );
+        const data = await res.json();
+        availability[dateStr] = data.length > 0; // true = boekbaar
+      } catch (err) {
+        console.error(err);
+        availability[dateStr] = false;
+      }
+    }),
+  );
 
   monthAvailability.value = availability;
 }
 
 // -------------------- Day Classes --------------------
 function dayClass(day) {
-  if (!day) return '';
+  if (!day) return "";
   const dateStr = formatDate(day);
 
   // Buiten tour-periode altijd grijs
-  if (day < minDate || day > maxDate) 
-    return 'bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2';
+  if (day < minDate || day > maxDate)
+    return "bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2";
 
   // Geen beschikbaarheid
   const isAvailable = monthAvailability.value[dateStr];
-  if (!isAvailable) 
-    return 'bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2';
+  if (!isAvailable)
+    return "bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2";
 
   // geselecteerd
   if (selectedDate.value && formatDate(selectedDate.value) === dateStr)
-    return 'bg-blue-500 text-white rounded p-2';
+    return "bg-blue-500 text-white rounded p-2";
 
   // beschikbaar
-  return 'bg-green-100 hover:bg-green-200 rounded p-2 cursor-pointer';
+  return "bg-green-100 hover:bg-green-200 rounded p-2 cursor-pointer";
 }
 
 // -------------------- Select Day --------------------
@@ -172,7 +213,11 @@ watch(selectedDate, async (date) => {
   availableTimes.value = [];
 
   try {
-    const res = await fetch(apiUrl(`/public/availability?date=${formatDate(date)}&tourId=${props.tourId}`));
+    const res = await fetch(
+      apiUrl(
+        `/public/availability?date=${formatDate(date)}&tourId=${props.tourId}`,
+      ),
+    );
     availableTimes.value = await res.json();
   } catch (err) {
     console.error(err);
@@ -180,6 +225,20 @@ watch(selectedDate, async (date) => {
     loading.value = false;
   }
 });
+
+const selectedDateFormatted = computed(() => {
+  if (!selectedDate.value) return '';
+  return selectedDate.value.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  });
+});
+
+function goBack() {
+  selectedDate.value = null;
+  availableTimes.value = [];
+}
 
 // -------------------- Navigate Month --------------------
 function prevMonth() {
@@ -193,5 +252,4 @@ function nextMonth() {
 
 // Fetch availability bij load
 onMounted(fetchMonthAvailability);
-
 </script>

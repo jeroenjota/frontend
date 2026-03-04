@@ -1,5 +1,5 @@
 <template>
-  <section id="categories" class="scroll-mt-40 bg-sky-200 py-8">
+  <section id="categories" class="scroll-mt-[180px] bg-sky-300 py-8">
     <div class="container mx-auto max-w-7xl px-4">
       <!-- Section Header -->
       <div class="mb-4 text-center">

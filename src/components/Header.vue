@@ -4,14 +4,14 @@
       :class="[
         'w-full',
         isScrolled
-          ? 'bg-cyan-100/95 backdrop-blur shadow-md py-4'
-          : 'bg-cyan-100 py-6',
+          ? 'bg-sky-200/95 backdrop-blur shadow-md py-2'
+          : 'bg-sky-200 py-4',
       ]">
       <div
-        class="mx-auto grid h-16 max-w-full grid-cols-[auto_1fr_auto] items-center gap-4 sm:h-20 md:h-24 lg:h-32">
+        class="mx-auto grid max-w-full grid-cols-[auto_1fr_auto] items-center gap-4">
         <!-- logo -->
         <div class="flex items-center justify-start">
-          <a href="#home" class="py-2 text-2xl font-bold text-cyan-800">
+          <a href="#home" class="py-1 text-2xl font-bold text-cyan-800">
             <img
               :src="assetUrl('/uploads/system/logo.gif')"
               class="ml-4 h-16 w-auto sm:h-20 md:h-24 lg:h-32"
@@ -21,7 +21,7 @@
         <!-- titel -->
         <div class="flex justify-center">
           <h1
-            class="text-primary font-garamond text-left text-2xl sm:text-4xl md:text-6xl lg:text-8xl">
+            class="text-primary font-garamond text-left text-3xl sm:text-5xl md:text-6xl lg:text-8xl">
             Amsterdam Tours
           </h1>
         </div>

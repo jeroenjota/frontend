@@ -1,5 +1,5 @@
 <template>
-<section id="home" class="scroll-mt-40 bg-sky-100 py-0">
+<section id="home" class="scroll-mt-[200px] bg-sky-200 py-0">
   <div
     class="relative flex items-center justify-center bg-cover bg-center bg-no-repeat p-2"
     :style="{ backgroundImage: `url(${fotoUrl('/uploads/system/main.jpg')})` }"
@@ -12,10 +12,10 @@
             class="w-full rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md"
           >
             <Intro />
-            <div class="mt-1 flex justify-center gap-4 lg:justify-start">
+            <div class="mt-1 flex justify-center gap-4">
               <a
                 href="#tours"
-                class="rounded-lg bg-cyan-900 px-6 py-3 text-sm font-semibold text-white shadow transition hover:bg-cyan-700"
+                class="rounded-lg bg-cyan-700 px-6 py-3 text-sm font-semibold text-white shadow transition hover:bg-cyan-700"
               >
                 All Tours
               </a>

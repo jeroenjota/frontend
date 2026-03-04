@@ -8,7 +8,7 @@
         </h2>
         
         <div class="text-primary font-garamond mt-2 px-4">
-          <p class="sm:text-lg md:text-3xl">
+          <p class="sm:text-lg md:text-2xl lg:text-3xl">
             Jota Services focuses on offering unique and personalized tours in the
             Netherlands.
           </p>

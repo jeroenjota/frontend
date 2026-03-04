@@ -1,5 +1,5 @@
 <template>
-  <footer id="footer" class="text-primary mt-1 bg-cyan-100 py-1">
+  <section id="footer" class="text-primary bg-sky-200">
     <div class="mx-auto max-w-7xl px-4">
       <div
         class="mb-1 flex flex-col gap-3 border-gray-700 py-2 md:flex-row md:justify-between">
@@ -79,7 +79,7 @@
         </div> -->
       </div>
     </div>
-  </footer>
+  </section>
   <Terms v-if="showTerms" @close="toggleTerms"></Terms>
   <Privacy v-if="showPrivacy" @close="togglePrivacy"></Privacy>
 </template>

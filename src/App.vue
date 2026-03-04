@@ -14,6 +14,10 @@
       :key="selectedTour?.id"
       :tour="selectedTour"
       @close="closeTour" />
+
+  </div>
+
+      <!-- 
     <main class="container mx-auto px-4 py-8">
       <button
         class="bg-primary hover:bg-primary/80 fixed bottom-4 right-4 rounded-full p-3 text-white shadow-lg transition-colors"
@@ -22,7 +26,7 @@
         ↑
       </button>
     </main>
-  </div>
+     -->
 </template>
 <script setup>
 import { ref } from "vue";

@@ -1,5 +1,5 @@
 <template>
-  <div id="contact" class="scroll-mt-40 bg-blue-200 px-4 py-8 sm:px-6 lg:px-8">
+  <div id="contact" class="scroll-mt-[180px] bg-sky-300 px-4 py-8 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
       <div class="mb-4 text-center">
         <h1
@@ -10,7 +10,7 @@
 
       <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div class="space-y-8">
-          <div class="rounded-lg border border-gray-100 bg-white p-8 shadow-xl">
+          <div class="rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
             <h2 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
               Contact Information
             </h2>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div
-          class="w-full rounded-lg border border-gray-100 bg-white p-8 shadow-xl">
+          class="w-full rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
           <h2 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
             Send us a message
           </h2>

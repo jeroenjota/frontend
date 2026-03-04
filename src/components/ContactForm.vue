@@ -1,3 +1,5 @@
+<!-- ContactForm.vue modal -->
+
 <template>
   <transition name="modal-fade">
     <div
@@ -11,8 +13,8 @@
           possible.
         </p>
         <p class="text-sm text-gray-600">
-          First name, surname, and email are required, but it will help if
-          you provide as much information as possible
+          First name, surname, and email are required, but it will help if you
+          provide as much information as possible
         </p>
         <form
           @submit.prevent="submitForm"
@@ -27,7 +29,6 @@
           </div>
           <!-- Naam -->
           <div class="grid gap-4 sm:grid-cols-4">
-
             <div class="sm:col-span-1">
               <label class="form-label">First name</label>
               <input
@@ -52,7 +53,6 @@
                 type="text"
                 class="form-input" />
             </div>
-
           </div>
           <div class="grid gap-4 sm:grid-cols-4">
             <!--  Email -->
@@ -141,6 +141,26 @@
               @enter-cancelled="">
               Close
             </button>
+            <label class="mt-4 flex items-center gap-2">
+              <input
+                type="checkbox"
+                v-model="agreedToTerms"
+                class="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500" />
+              I have read and agree to the
+              <button
+                type="button"
+                @click="showPrivacy = true"
+                class="text-cyan-700 underline hover:text-cyan-500">
+                Privacy Policy
+              </button>
+              and
+              <button
+                type="button"
+                @click="showTerms = true"
+                class="text-cyan-700 underline hover:text-cyan-500">
+                Terms & Conditions
+              </button>
+            </label>
             <div class="min-h-5 text-sm transition-all duration-300">
               <transition name="fade">
                 <p
@@ -198,6 +218,9 @@ const props = defineProps({
   surname: { type: String, default: "" },
   email: { type: String, default: "" },
   message: { type: String, default: "" },
+  mode: { type: String, default: "info" },
+  preferredDate: { type: String, default: "" }, // 👈 nieuw
+  startTime: { type: String, default: "" }, // 👈 nieuw
 });
 
 const emit = defineEmits(["close"]);
@@ -209,23 +232,38 @@ const success = ref(false);
 const error = ref(null);
 const shake = ref(false);
 const firstInput = ref(null);
-
+const agreedToPrivacy = ref(false);
 /* -----------------------
    Init
 ------------------------*/
 const initializeForm = () => {
   contactForm.tourTitle = props.tourname || "Jota Tours";
-  contactForm.subject = props.subject || "General Inquiry";
+  contactForm.subject =
+    props.subject ||
+    (props.mode === "booking"
+      ? `Booking request - ${props.tourname}`
+      : `Info request - ${props.tourname}`);
 
-  contactForm.name = props.name;
-  contactForm.surname = props.surname;
-  contactForm.email = props.email;
+  // Zet preferred date indien meegegeven
+  contactForm.preferredDate = props.preferredDate || "";
 
-  contactForm.message =
-    props.message ||
-    (props.tourname
-      ? `Please get in touch with me about ${props.tourname}`
-      : "");
+  // Berichten afhankelijk van mode
+  if (props.mode === "booking") {
+    contactForm.message = `I would like to book:
+
+Tour: ${props.tourname}
+Date: ${props.preferredDate || "[please suggest a date]"}
+Start time: ${props.startTime || "[please suggest a time]"}
+
+Please contact me with more details.`;
+  } else if (props.mode === "info") {
+    contactForm.message = `I would like to know more about your tour
+  "${props.tourname}"
+Please contact me,
+thank you.`;
+  } else {
+    contactForm.message = "";
+  }
 };
 
 initializeForm();
@@ -266,6 +304,13 @@ const submitForm = async () => {
   loading.value = true;
 
   if (contactForm.company) {
+    loading.value = false;
+    return;
+  }
+  if (!agreedToPrivacy.value) {
+    shake.value = true;
+    setTimeout(() => (shake.value = false), 400);
+    alert("Please agree to the privacy policy before submitting.");
     loading.value = false;
     return;
   }
