@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-2 sm:p-4"
+    class="z-9999 fixed inset-0 flex items-center justify-center bg-black/60 p-2 sm:p-4"
     @click.self="emit('close')">
     <div
       class="max-w-200 flex max-h-[95vh] w-full flex-col overflow-hidden rounded-lg border-4 border-blue-800 bg-gray-100 p-4 shadow-2xl">
@@ -58,7 +58,8 @@
         </div>
 
         <!-- Calendar: 1/3 -->
-        <div class="flex-1 overflow-auto rounded-lg border border-gray-500 bg-gray-100 p-2 sm:flex-1">
+        <div
+          class="flex-1 overflow-auto rounded-lg border border-gray-500 bg-gray-100 p-2 sm:flex-1">
           <AvailabilityCalendar
             v-if="tour && tour.fromDate && tour.tillDate"
             :tour-id="tour.id"
@@ -90,6 +91,8 @@
       <!-- ContactForm modal -->
       <ContactForm
         v-if="showMailForm"
+        @togglePrivacy="$emit('togglePrivacy')"
+        @toggleTerms="$emit('toggleTerms')"
         @close="showMailForm = false"
         :subject="'Booking request: ' + tour.title"
         :mode="contactMode"
@@ -113,7 +116,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["togglePrivacy", "toggleTerms", "close"]);
 const categories = ref([]);
 const fotos = ref([]);
 const current = ref(0);
@@ -150,7 +153,7 @@ function niceDate(dateStr) {
 }
 
 function openBooking({ date, time }) {
-  bookingDate.value = niceDate(date);
+  bookingDate.value = date.toISOString().split("T")[0];
   bookingTime.value = time;
   contactMode.value = "booking";
   showMailForm.value = true;

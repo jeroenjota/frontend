@@ -40,6 +40,5 @@
 import { assetUrl } from "../api";
 const fotoUrl = assetUrl;
 import Intro from "./Intro.vue";
-console.log("Background image:", fotoUrl("/uploads/system/main.jpg"));
 </script>
 <style lang=""></style>

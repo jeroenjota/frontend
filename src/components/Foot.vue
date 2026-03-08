@@ -56,10 +56,10 @@
               </span>
               <span v-else>
                 <Icon :icon="service.icon" class="inline h-5 w-5" />
-                <button @click="toggleTerms" class="transition hover:text-white" v-if="service.action === 'toggleTerms'">
+                <button @click="$emit('toggleTerms')" class="transition hover:text-white" v-if="service.action === 'toggleTerms'">
                   {{ service.name }}
                 </button>
-                <button @click="togglePrivacy" class="transition hover:text-white" v-else-if="service.action === 'togglePrivacy'">
+                <button @click="$emit('togglePrivacy')" class="transition hover:text-white" v-else-if="service.action === 'togglePrivacy'">
                   {{ service.name }}
                 </button>
               </span>
@@ -80,19 +80,11 @@
       </div>
     </div>
   </section>
-  <Terms v-if="showTerms" @close="toggleTerms"></Terms>
-  <Privacy v-if="showPrivacy" @close="togglePrivacy"></Privacy>
 </template>
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
 import { apiUrl, assetUrl } from "../api";
-import Terms from "./Terms.vue";
-import Privacy from "./Privacy.vue";
-
-const showTerms = ref(false);
-const showPrivacy = ref(false);
-
 const friendsLinks = ref([
   {
     name: "",
@@ -145,15 +137,6 @@ const paymentIcons = ref([
   "logos:paypal",
   "logos:ideal",
 ]);
-
-function toggleTerms() {
-  showTerms.value = !showTerms.value;
-} 
-
-function togglePrivacy() {
-  showPrivacy.value = !showPrivacy.value;
-}
-
 function friendsLogo(logo) {
   if (!logo) return null;
   return assetUrl("/uploads/system/" + logo);

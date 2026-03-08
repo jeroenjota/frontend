@@ -1,7 +1,7 @@
 <template>
   <div
     id="about"
-    class="bg-linear-to-r scroll-mt-[180px] from-sky-200 to-sky-300 px-4 py-6 sm:px-6 lg:px-8">
+    class="bg-linear-to-r scroll-mt-45 from-sky-200 to-sky-300 px-4 py-6 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
       <h2
         class="font-garamond text-primary mb-4 text-center text-2xl font-bold sm:text-3xl md:text-4xl">

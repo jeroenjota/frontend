@@ -6,61 +6,77 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
       @click.self="emit('close')">
       <div
-        class="modal-card w-full max-w-2xl overflow-hidden rounded-2xl border-4 border-blue-500 bg-gray-200 p-6 shadow-2xl">
-        <h2 class="font-garamond text-primary text-2xl">{{ subject }}</h2>
-        <p>
+        class="scroll-mt-45 max-h-[90vh] w-full max-w-xl overflow-auto rounded-2xl border-4 border-blue-500 bg-gray-200 p-6 shadow-2xl">
+        <h2 class="font-garamond text-primary text-xl sm:text-2xl">
+          {{ subject }}
+        </h2>
+        <p class="text-sm text-gray-600 sm:text-base">
           Please fill in the form below, and we will get back to you as soon as
           possible.
         </p>
-        <p class="text-sm text-gray-600">
+        <p
+          class="mb-1 hidden text-sm text-gray-600 sm:mb-2 sm:block sm:text-base">
           First name, surname, and email are required, but it will help if you
           provide as much information as possible
         </p>
         <form
           @submit.prevent="submitForm"
           :class="[
-            'mx-auto max-w-3xl space-y-6 border-2 border-gray-500 p-6 shadow-md transition-all duration-200',
+            'mx-auto max-w-3xl space-y-3 sm:space-y-6 border-2 border-gray-500 p-4 sm:p-6 shadow-md',
             shake ? 'animate-[shake_0.3s_ease-in-out]' : '',
           ]">
-          <div class="mb-4 h-2 w-full rounded bg-gray-300">
+          <div
+            class="mb-2 hidden h-2 w-full rounded bg-gray-300 text-sm sm:block sm:text-base">
             <div
               class="h-2 rounded bg-blue-500 transition-all duration-300"
               :style="{ width: progress + '%' }"></div>
           </div>
           <!-- Naam -->
-          <div class="grid gap-4 sm:grid-cols-4">
+          <div class="grid gap-2 sm:grid-cols-4">
             <div class="sm:col-span-1">
-              <label class="form-label">First name</label>
+              <label class="hidden text-sm font-medium text-gray-700 sm:block"
+                >First name</label
+              >
               <input
                 v-model="contactForm.name"
                 required
+                placeholder="First name"
                 type="text"
-                class="form-input" />
+                class="form-input sm:placeholder-transparent" />
             </div>
 
             <div class="sm:col-span-2">
-              <label class="form-label">Surname</label>
+              <label class="hidden text-sm font-medium text-gray-700 sm:block"
+                >Surname</label
+              >
               <input
                 v-model="contactForm.surname"
                 type="text"
+                placeholder="Surname"
                 required
-                class="form-input" />
+                class="form-input sm:placeholder-transparent" />
             </div>
-            <div>
-              <label class="form-label">Country</label>
+            <div class="w-full">
+              <label class="hidden text-sm font-medium text-gray-700 sm:block"
+                >Country</label
+              >
               <input
                 v-model="contactForm.country"
                 type="text"
-                class="form-input" />
+                placeholder="Country"
+                class="form-input sm:placeholder-transparent" />
             </div>
           </div>
-          <div class="grid gap-4 sm:grid-cols-4">
+          <div class="grid gap-2 sm:grid-cols-4">
             <!--  Email -->
             <div class="w-full sm:col-span-3">
-              <label class="form-label">Email</label>
+              <label class="hidden text-sm font-medium text-gray-700 sm:block"
+                >Email</label
+              >
               <input
                 v-model="contactForm.email"
                 type="email"
+                placeholder="Email"
                 required
                 :class="[
                   'form-input transition-all duration-200',
@@ -71,30 +87,55 @@
                     : '',
                 ]" />
             </div>
-            <!-- Phone -->
-            <div>
-              <label class="form-label sm:col-span-1">Phone</label>
-              <input
-                v-model="contactForm.phone"
-                type="text"
-                class="form-input" />
+
+            <div class="grid sm:grid-cols-1">
+              <!-- Phone -->
+              <div class="w-full">
+                <label class="hidden text-sm font-medium text-gray-700 sm:block"
+                  >Phone</label
+                >
+                <input
+                  v-model="contactForm.phone"
+                  type="text"
+                  placeholder="Phone"
+                  class="form-input w-full sm:placeholder-transparent" />
+              </div>
             </div>
           </div>
           <!-- Tour details -->
-          <div class="grid gap-4 sm:grid-cols-5">
-            <div class="sm:col-span-1">
-              <label class="form-label">Group size</label>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div class="colspan-1 grid sm:col-span-1">
+              <label class="block text-sm font-medium text-gray-700 sm:block"
+                >Group size</label
+              >
               <input
                 v-model.number="contactForm.groupSize"
                 type="number"
                 min="1"
                 placeholder="Number of people"
-                class="form-input" />
+                class="form-input sm:placeholder-transparent" />
             </div>
-            <div class="sm:col-span-2">
-              <label class="form-label">Preferred language</label>
-              <select v-model="contactForm.language" class="form-input">
-                <option disabled value="">Select a language</option>
+
+            <div class="hidden w-full sm:col-span-1">
+              <div>
+                <label class="text-sm font-medium text-gray-700 sm:block"
+                  >Preferred date</label
+                >
+                <input
+                  v-model="contactForm.preferredDate"
+                  type="date"
+                  class="form-input sm:placeholder-transparent" />
+              </div>
+            </div>
+            <!-- language -->
+            <div class="w-full">
+              <label class="text-sm font-medium text-gray-700 sm:block"
+                >Preferred language</label
+              >
+              <select
+                v-model="contactForm.language"
+                class="form-input sm:placeholder-transparent">
+                <option disabled value="">Language</option>
                 <option value="en">English</option>
                 <option value="nl">Nederlands</option>
                 <option value="fr">Français</option>
@@ -102,25 +143,17 @@
                 <option value="es">Español</option>
               </select>
             </div>
-
-            <div class="sm:col-span-2">
-              <div>
-                <label class="form-label">Preferred date</label>
-                <input
-                  v-model="contactForm.preferredDate"
-                  type="date"
-                  class="form-input" />
-              </div>
-            </div>
           </div>
 
           <!-- Bericht -->
           <div>
-            <label class="form-label">Message</label>
+            <label class="hidden text-sm font-medium text-gray-700 sm:block"
+              >Message</label
+            >
             <textarea
               v-model="contactForm.message"
               rows="5"
-              class="form-input"
+              class="form-input sm:placeholder-transparent"
               placeholder="Your message"></textarea>
           </div>
 
@@ -133,72 +166,81 @@
             autocomplete="off" />
 
           <!-- Actie -->
-          <div class="flex items-center justify-between">
-            <button
-              type="button"
-              @click="emit('close')"
-              class="rounded-lg bg-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-400"
-              @enter-cancelled="">
-              Close
-            </button>
-            <label class="mt-4 flex items-center gap-2">
+          <!-- Actions -->
+          <div class="space-y-4">
+            <!-- Privacy agreement -->
+            <label class="flex items-start gap-2 text-sm text-gray-700">
               <input
                 type="checkbox"
-                v-model="agreedToTerms"
-                class="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500" />
-              I have read and agree to the
-              <button
-                type="button"
-                @click="showPrivacy = true"
-                class="text-cyan-700 underline hover:text-cyan-500">
-                Privacy Policy
-              </button>
-              and
-              <button
-                type="button"
-                @click="showTerms = true"
-                class="text-cyan-700 underline hover:text-cyan-500">
-                Terms & Conditions
-              </button>
+                v-model="agreedToPrivacy"
+                class="mt-1 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500" />
+              <span>
+                I have read and agree to the
+                <button
+                  type="button"
+                  @click="emit('togglePrivacy')"
+                  class="text-cyan-700 underline hover:text-cyan-500">
+                  Privacy Policy
+                </button>
+                and
+                <button
+                  type="button"
+                  @click="emit('toggleTerms')"
+                  class="text-cyan-700 underline hover:text-cyan-500">
+                  Terms & Conditions</button
+                >.
+              </span>
             </label>
-            <div class="min-h-5 text-sm transition-all duration-300">
+
+            <!-- Status message -->
+            <div class="min-h-5 text-sm">
               <transition name="fade">
-                <p
-                  v-if="success"
-                  class="mt-3 text-center font-medium text-green-600">
+                <p v-if="success" class="font-medium text-green-600">
                   ✓ Thank you! I’ll contact you shortly.
                 </p>
               </transition>
+
               <p v-if="error" class="text-red-600">
                 {{ error }}
               </p>
             </div>
-            <button
-              type="submit"
-              :disabled="!isValid || loading || success"
-              class="relative flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
-              <svg
-                v-if="loading"
-                class="h-4 w-4 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none">
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="white"
-                  stroke-width="4" />
-                <path
-                  class="opacity-75"
-                  fill="white"
-                  d="M4 12a8 8 0 018-8v8z" />
-              </svg>
 
-              <span v-if="success">✓ Sent</span>
-              <span v-else-if="loading">Sending...</span>
-              <span v-else>Send message</span>
-            </button>
+            <!-- Buttons -->
+            <div class="flex items-center justify-between pt-2">
+              <button
+                type="button"
+                @click="emit('close')"
+                class="rounded-lg bg-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-400">
+                Close
+              </button>
+
+              <button
+                type="submit"
+                :disabled="!isValid || loading || success"
+                class="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+                <svg
+                  v-if="loading"
+                  class="h-4 w-4 animate-spin"
+                  viewBox="0 0 24 24"
+                  fill="none">
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="white"
+                    stroke-width="4" />
+                  <path
+                    class="opacity-75"
+                    fill="white"
+                    d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+
+                <span v-if="success">✓ Sent</span>
+                <span v-else-if="loading">Sending...</span>
+                <span v-else>Send message</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -211,19 +253,15 @@ import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { createContactForm } from "../composables/useContactForm.js";
 import { apiUrl } from "../api.js";
 
+const emit = defineEmits(["togglePrivacy", "toggleTerms", "close"]);
+
 const props = defineProps({
   subject: { type: String, default: "" },
   tourname: { type: String, default: "" },
-  name: { type: String, default: "" },
-  surname: { type: String, default: "" },
-  email: { type: String, default: "" },
-  message: { type: String, default: "" },
   mode: { type: String, default: "info" },
   preferredDate: { type: String, default: "" }, // 👈 nieuw
   startTime: { type: String, default: "" }, // 👈 nieuw
 });
-
-const emit = defineEmits(["close"]);
 
 const contactForm = createContactForm();
 
@@ -249,12 +287,10 @@ const initializeForm = () => {
 
   // Berichten afhankelijk van mode
   if (props.mode === "booking") {
-    contactForm.message = `I would like to book:
-
+    contactForm.message = `I would like to book
 Tour: ${props.tourname}
 Date: ${props.preferredDate || "[please suggest a date]"}
 Start time: ${props.startTime || "[please suggest a time]"}
-
 Please contact me with more details.`;
   } else if (props.mode === "info") {
     contactForm.message = `I would like to know more about your tour

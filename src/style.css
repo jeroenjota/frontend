@@ -79,3 +79,27 @@ html{
 .fade-leave-to {
   opacity: 0;
 }
+
+animation: spin 1s linear infinite;
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tour-card{
+  width:320px;
+  flex-shrink:0;
+  transition:transform .25s ease, box-shadow .25s ease;
+  will-change:transform;
+}
+
+.tour-card:hover{
+  transform:scale(1.08);
+  z-index:20;
+  box-shadow:0 25px 50px rgba(0,0,0,.25);
+}

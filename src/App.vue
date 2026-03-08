@@ -3,30 +3,24 @@
     <Header />
     <Home />
     <!-- <Intro /> -->
-    <Tours @open-tour="openTour" />
+    <Tours v-if="!showTourDetail" @open-tour="openTour" />
     <Categories @open-tour="openTour" />
     <Offers @open-tour="openTour" />
     <About />
     <Contact />
-    <Foot />
+    <Foot @togglePrivacy="togglePrivacy" @toggleTerms="toggleTerms" />
     <TourDetail
       v-if="showTourDetail"
       :key="selectedTour?.id"
       :tour="selectedTour"
-      @close="closeTour" />
-
+      :modalOpen="showTourDetail"
+      @togglePrivacy="togglePrivacy"
+      @toggleTerms="toggleTerms"
+      @close="closeTour"
+      class="" />
+    <Terms v-if="showTerms" @close="toggleTerms"></Terms>
+    <Privacy v-if="showPrivacy" @close="togglePrivacy"></Privacy>
   </div>
-
-      <!-- 
-    <main class="container mx-auto px-4 py-8">
-      <button
-        class="bg-primary hover:bg-primary/80 fixed bottom-4 right-4 rounded-full p-3 text-white shadow-lg transition-colors"
-        @click="scrollToTop"
-        aria-label="Scroll to top">
-        ↑
-      </button>
-    </main>
-     -->
 </template>
 <script setup>
 import { ref } from "vue";
@@ -41,12 +35,23 @@ import About from "./components/About.vue";
 import Contact from "./components/Contact.vue";
 import Foot from "./components/Foot.vue";
 import { assetUrl } from "./api";
+import Terms from "./components/Terms.vue";
+import Privacy from "./components/Privacy.vue";
 
 const fotoUrl = assetUrl;
 const selectedTour = ref(null);
 const showTourDetail = ref(false);
 
 const showTerms = ref(false);
+const showPrivacy = ref(false);
+
+function toggleTerms() {
+  showTerms.value = !showTerms.value;
+}
+
+function togglePrivacy() {
+  showPrivacy.value = !showPrivacy.value;
+}
 
 function openTour(tour) {
   // console.log("Opening tour:", tour);
