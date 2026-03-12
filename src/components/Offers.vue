@@ -83,33 +83,13 @@
                   <div
                     class="mb-4 flex justify-between text-sm font-semibold text-gray-600">
                     <span>{{ tour.duration }} hours</span>
-                    <span>{{ tour.maxpers }} pers</span>
+                    <span>{{ tour.groupSize }} people</span>
                   </div>
 
                   <!-- PRICE -->
-                  <footer class="flex items-center justify-between">
-                    <div>
-                      <span
-                        v-if="tour.discount > 0"
-                        class="mr-2 text-sm text-gray-500 line-through">
-                        {{
-                          new Intl.NumberFormat("nl-NL", {
-                            style: "currency",
-                            currency: "EUR",
-                          }).format(tour.price)
-                        }}
-                      </span>
-
-                      <span class="text-lg font-bold text-cyan-600">
-                        {{
-                          new Intl.NumberFormat("nl-NL", {
-                            style: "currency",
-                            currency: "EUR",
-                          }).format(
-                            Number(tour.price) * (1 - tour.discount / 100),
-                          )
-                        }}
-                      </span>
+                  <footer class="flex items-center justify-between rounded bg-blue-500 px-2 py-1 text-sm font-bold text-white">
+                    <div class="flex flex-row gap-2">
+                    <PriceBlock :tour="tour" />
                     </div>
 
                     <button
@@ -142,6 +122,7 @@
 import { Icon } from "@iconify/vue";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { apiUrl, assetUrl } from "../api.js";
+import PriceBlock from "./PriceBlock.vue";
 //  Moved to App.vue
 // import TourDetail from "./TourDetail.vue";
 // const emit = defineEmits(["open-tour"]);

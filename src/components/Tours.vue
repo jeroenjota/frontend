@@ -1,16 +1,17 @@
 <template>
-  <section id="tours" class="scroll-mt-45 bg-sky-200 py-8">
+  <section id="tours" class="scroll-mt-45 bg-cyan-800 py-4">
     <main class="mx-auto max-w-7xl px-4">
       <h2
-        class="font-garamond text-primary mb-8 text-center text-2xl font-bold sm:text-4xl">
+        class="font-garamond mb-2 text-center text-2xl font-bold text-gray-300 sm:text-4xl">
         Featured Tours
       </h2>
 
-      <div class="relative z-0 rounded-2xl border border-blue-500 p-2">
+      <div class="relative z-0 rounded-2xl p-2 shadow-lg">
         <!-- LEFT BUTTON -->
         <button
-          @mouseenter="startAutoScroll('left')"
-          class="z-99 group absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition hover:scale-110 hover:bg-white">
+          @mouseenter="startAutoScroll('right')"
+          @click="startAutoScroll('right')"
+          class="z-500 top-19/20 group absolute left-4 -translate-y-1/2 rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition hover:scale-110 hover:bg-white">
           <svg
             class="h-6 w-6 text-gray-700 transition group-hover:-translate-x-0.5"
             fill="none"
@@ -25,8 +26,9 @@
         </button>
         <!-- RIGHT BUTTON -->
         <button
-          @mouseenter="startAutoScroll('right')"
-          class="z-99 group absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition duration-200 hover:scale-110 hover:bg-white active:scale-95">
+          @mouseenter="startAutoScroll('left')"
+          @click="startAutoScroll('left')"
+          class="z-500 top-19/20 group absolute right-4 -translate-y-1/2 rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition duration-200 hover:scale-110 hover:bg-white active:scale-95">
           <svg
             class="h-6 w-6 text-gray-700 transition group-hover:translate-x-0.5"
             fill="none"
@@ -42,16 +44,16 @@
 
         <!-- fade -->
         <div
-          class="bg-linear-to-r w-15 pointer-events-none absolute left-0 top-0 h-full from-gray-200"></div>
+          class="bg-linear-to-r w-50 pointer-events-none absolute left-0 top-0 h-full from-gray-200"></div>
         <div
-          class="bg-linear-to-l w-15 pointer-events-none absolute right-0 top-0 h-full from-gray-200"></div>
+          class="bg-linear-to-l w-50 pointer-events-none absolute right-0 top-0 h-full from-gray-200"></div>
 
         <!-- CAROUSEL -->
         <div
           ref="carousel"
           @mouseenter="pauseAutoScroll"
           @mouseleave="resumeAutoScroll"
-          class="flex gap-6 overflow-x-auto scroll-smooth pb-6">
+          class="flex gap-6 overflow-x-auto scroll-smooth pb-6 pt-8">
           <TourCard
             v-for="tour in tours"
             :key="tour.id"

@@ -1,10 +1,10 @@
 <template>
   <article
-    class="min-w-70 max-w-70 shrink-0 overflow-hidden rounded-xl bg-white shadow transition hover:-translate-y-1 hover:shadow-xl"
+    class="min-w-80 max-w-90 shrink-0 overflow-hidden rounded-xl bg-white shadow transition hover:-translate-y-1 hover:shadow-xl"
   >
     <img
       :src="assetUrl('/uploads/resized/' + tour.image)"
-      class="h-40 w-full object-cover"
+      class="h-64 w-full object-cover"
     />
 
     <div class="space-y-2 p-4">
@@ -14,7 +14,7 @@
       </h3>
 
       <p class="text-sm text-gray-600">
-        {{ tour.duration }} • {{ tour.max_people }} people
+        {{ tour.duration }}h / {{ tour.groupSize }} people
       </p>
 
       <p class="text-primary font-semibold">

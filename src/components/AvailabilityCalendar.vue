@@ -1,44 +1,61 @@
 <template>
   <div class="space-y-4">
-
     <!-- STEP 1: MAANDOVERZICHT -->
     <div v-if="!selectedDate">
-
+      <div class="mb-2 flex justify-center gap-4 text-xs">
+        <span class="flex items-center gap-1">
+          <span class="h-2 w-2 rounded-full bg-green-500"></span>
+          many times
+        </span>
+        <span class="flex items-center gap-1">
+          <span class="h-2 w-2 rounded-full bg-yellow-500"></span>
+          few left
+        </span>
+      </div>
       <!-- Month navigation -->
       <div class="mb-2 flex items-center justify-between">
-        <button @click="prevMonth" class="rounded bg-gray-200 px-3 py-1">Prev</button>
+        <button @click="prevMonth" class="rounded bg-gray-200 px-3 py-1">
+          Prev
+        </button>
         <h2 class="text-lg font-semibold">
           {{ currentMonthName }} {{ currentYear }}
         </h2>
-        <button @click="nextMonth" class="rounded bg-gray-200 px-3 py-1">Next</button>
+        <button @click="nextMonth" class="rounded bg-gray-200 px-3 py-1">
+          Next
+        </button>
       </div>
 
       <!-- Calendar grid -->
-      <div class="grid grid-cols-7 gap-1 text-center">
-        <div class="font-semibold" v-for="d in weekdays" :key="d">
+      <div class="grid grid-cols-7 gap-0.5 text-center">
+        <div
+          class="text-xs sm:text-sm sm:font-semibold"
+          v-for="d in weekdays"
+          :key="d">
           {{ d }}
         </div>
 
         <template v-for="(day, idx) in monthDays" :key="idx">
-          <div v-if="day"
-               @click="selectDay(day)"
-               :class="dayClass(day)">
+          <div
+            v-if="day"
+            class="relative flex aspect-square items-center justify-center rounded text-xs sm:text-sm"
+            @click="selectDay(day)"
+            :class="dayClass(day)">
             {{ day.getDate() }}
+            <!-- Availability dots -->
+            <span
+              v-if="availabilityDot(day)"
+              class="absolute bottom-1 right-1 h-1.5 w-1.5 rounded-full"
+              :class="availabilityDot(day)"></span>
           </div>
           <div v-else></div>
         </template>
       </div>
-
     </div>
-
 
     <!-- STEP 2: BESCHIKBARE TIJDEN -->
     <div v-else>
-
       <!-- Geselecteerde datum -->
-      <h2 class="mb-0 text-center font-semibold">
-        Availability for
-      </h2>
+      <h2 class="mb-0 text-center font-semibold">Availability for</h2>
       <h2 class="mb-2 text-center font-semibold">
         {{ selectedDateFormatted }}
       </h2>
@@ -57,9 +74,7 @@
         </button>
       </div>
 
-      <div v-else-if="!loading">
-        No availability on this date.
-      </div>
+      <div v-else-if="!loading">No availability on this date.</div>
       <!-- Terug knop -->
       <button
         @click="goBack"
@@ -67,7 +82,6 @@
         ← Back to calendar
       </button>
     </div>
-
   </div>
 </template>
 
@@ -76,7 +90,6 @@ import { ref, computed, watch, onMounted } from "vue";
 import { apiUrl } from "../api.js";
 
 const emit = defineEmits(["select-time"]);
-
 
 const props = defineProps({
   tourId: { type: Number, required: true },
@@ -91,11 +104,10 @@ const availableTimes = ref([]);
 const loading = ref(false);
 const monthAvailability = ref({}); // { 'YYYY-MM-DD': true/false }
 
-
-const selectedTime = ref(null)
+const selectedTime = ref(null);
 
 function selectTime(time) {
-  selectedTime.value = time
+  selectedTime.value = time;
   emit("select-time", { date: selectedDate.value, time });
 }
 
@@ -144,59 +156,79 @@ const monthDays = computed(() => {
   return days;
 });
 
+function availabilityDot(day) {
+  const dateStr = formatDate(day);
+  const slots = monthAvailability.value[dateStr];
+
+  if (!slots) return null;
+
+  if (slots >= 4) return "bg-green-500"; // veel beschikbaar
+  if (slots >= 1) return "bg-yellow-500"; // weinig beschikbaar
+
+  return "bg-gray-400"; // vol
+}
+
 // -------------------- Fetch availability for the month --------------------
 async function fetchMonthAvailability() {
-  const firstDay = new Date(currentYear.value, currentMonth.value, 1);
-  const lastDay = new Date(currentYear.value, currentMonth.value + 1, 0);
-
-  const start = firstDay < minDate ? minDate : firstDay;
-  const end = lastDay > maxDate ? maxDate : lastDay;
-
-  const daysToCheck = [];
-  for (let d = start.getDate(); d <= end.getDate(); d++) {
-    const dateObj = new Date(currentYear.value, currentMonth.value, d);
-    daysToCheck.push(formatDate(dateObj));
-  }
-
-  const availability = {};
-  await Promise.all(
-    daysToCheck.map(async (dateStr) => {
-      try {
-        const res = await fetch(
-          apiUrl(`/public/availability?date=${dateStr}&tourId=${props.tourId}`),
-        );
-        const data = await res.json();
-        availability[dateStr] = data.length > 0; // true = boekbaar
-      } catch (err) {
-        console.error(err);
-        availability[dateStr] = false;
-      }
-    }),
+  const res = await fetch(
+    apiUrl(
+      `/public/availability/month?year=${currentYear.value}&month=${
+        currentMonth.value + 1
+      }&tourId=${props.tourId}`,
+    ),
   );
+
+  const data = await res.json();
+  // console.log("Month availability data:", data);
+  const availability = {};
+
+  Object.keys(data).forEach((date) => {
+    availability[date] = data[date].length;
+  });
 
   monthAvailability.value = availability;
 }
 
 // -------------------- Day Classes --------------------
+// function dayClass(day) {
+//   if (!day) return "";
+//   const dateStr = formatDate(day);
+
+//   // Buiten tour-periode altijd grijs
+//   if (day < minDate || day > maxDate)
+//     return "bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2";
+
+//   // Geen beschikbaarheid
+//   const isAvailable = monthAvailability.value[dateStr];
+//   if (!isAvailable)
+//     return "bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2";
+
+//   // geselecteerd
+//   if (selectedDate.value && formatDate(selectedDate.value) === dateStr)
+//     return "bg-blue-500 text-white rounded p-2";
+
+//   // beschikbaar
+//   return "bg-green-100 hover:bg-green-200 rounded p-2 cursor-pointer";
+// }
+
 function dayClass(day) {
   if (!day) return "";
+
   const dateStr = formatDate(day);
+  const base =
+    "cursor-pointer aspect-square flex items-center justify-center rounded text-xs sm:text-sm";
 
-  // Buiten tour-periode altijd grijs
   if (day < minDate || day > maxDate)
-    return "bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2";
+    return `${base} bg-gray-200 text-gray-400 cursor-not-allowed`;
 
-  // Geen beschikbaarheid
-  const isAvailable = monthAvailability.value[dateStr];
-  if (!isAvailable)
-    return "bg-gray-200 text-gray-400 cursor-not-allowed rounded p-2";
+  const slots = monthAvailability.value[dateStr];
 
-  // geselecteerd
+  if (!slots) return `${base} bg-gray-200 text-gray-400 cursor-not-allowed`;
+
   if (selectedDate.value && formatDate(selectedDate.value) === dateStr)
-    return "bg-blue-500 text-white rounded p-2";
+    return `${base} bg-blue-500 text-white`;
 
-  // beschikbaar
-  return "bg-green-100 hover:bg-green-200 rounded p-2 cursor-pointer";
+  return `${base} bg-green-50 hover:bg-green-100`;
 }
 
 // -------------------- Select Day --------------------
@@ -227,11 +259,11 @@ watch(selectedDate, async (date) => {
 });
 
 const selectedDateFormatted = computed(() => {
-  if (!selectedDate.value) return '';
-  return selectedDate.value.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric'
+  if (!selectedDate.value) return "";
+  return selectedDate.value.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
   });
 });
 
@@ -249,6 +281,8 @@ function nextMonth() {
   current.value = new Date(currentYear.value, currentMonth.value + 1, 1);
   fetchMonthAvailability();
 }
+
+
 
 // Fetch availability bij load
 onMounted(fetchMonthAvailability);

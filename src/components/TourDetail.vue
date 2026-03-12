@@ -6,27 +6,23 @@
       class="max-w-200 flex max-h-[95vh] w-full flex-col overflow-hidden rounded-lg border-4 border-blue-800 bg-gray-100 p-4 shadow-2xl">
       <!-- Header -->
       <div
-        class="bg-primary mb-4 flex w-full flex-col gap-2 rounded-lg p-4 text-white sm:flex-row sm:items-center sm:justify-between">
-        <h2 class="text-xl font-bold sm:text-2xl">{{ tour.title }}</h2>
-        <div class="flex flex-wrap gap-4 text-sm font-semibold sm:text-base">
-          <span>{{ tour.duration }} hours</span>
-          <span>{{ tour.groupSize }} people</span>
-          <span>
-            {{
-              new Intl.NumberFormat("nl-NL", {
-                style: "currency",
-                currency: "EUR",
-              }).format(tour.price)
-            }}
-          </span>
+        class="bg-primary mb-4 flex w-full flex-col gap-1 rounded-lg p-4 text-white sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex-2 flex gap-1">
+          <h2 class="text-xl font-bold sm:text-2xl">{{ tour.title }}</h2>
+        </div>
+        <div
+          class="flex flex-1 flex-wrap gap-4 text-sm font-semibold sm:text-base">
+          <span>{{ tour.duration }} h</span>
+          <span>{{ tour.groupSize }} p</span>
+          <PriceBlock :tour="tour" />
         </div>
       </div>
 
       <!-- Main: Carousel + Calendar -->
-      <div class="flex flex-1 flex-col gap-4 overflow-hidden sm:flex-row">
+      <div class="flex min-h-fit flex-1 flex-col gap-4 overflow-hidden sm:flex-row">
         <!-- Carousel: 2/3 -->
         <div
-          class="sm:flex-2 flex flex-1 flex-col items-center overflow-hidden rounded-lg border border-gray-500 bg-gray-100">
+          class="sm:flex-2 flex flex-1 flex-col items-center overflow-hidden rounded-lg border border-gray-100 bg-gray-100">
           <div
             class="relative flex w-full justify-center bg-gray-100 p-2"
             @mouseenter="stopAutoplay"
@@ -38,10 +34,15 @@
             </div>
             <div v-else class="inline-flex w-full flex-col items-center">
               <div class="flex w-full justify-center">
-                <img
-                  :src="assetUrl('/uploads/resized/' + fotos[current].filename)"
-                  class="max-h-64 w-full max-w-full rounded object-contain"
-                  @click="openLightbox" />
+                <transition name="fade" mode="out-in">
+                  <img
+                    :key="fotos[current].filename"
+                    :src="
+                      assetUrl('/uploads/resized/' + fotos[current].filename)
+                    "
+                    class="max-h-64 w-full max-w-full rounded object-contain"
+                    @click="openLightbox" />
+                </transition>
               </div>
               <div
                 v-if="fotos.length > 1"
@@ -68,9 +69,14 @@
             @select-time="openBooking" />
         </div>
       </div>
+      <!-- info -->
+      <div class="text-center italic hover:not-italic">
+        Featuring: {{ listItems.join(", ") }}
+      </div>
       <!-- Content: full width -->
       <div
-        class="hover:prose-a:text-blue-800 mt-4 max-h-60 overflow-y-auto rounded-lg bg-gray-100 p-4">
+        class="hover:prose-a:text-blue-800 sm:prose prose-xl prose-blue mt-4 max-h-60 overflow-y-auto rounded-lg bg-gray-100 p-4 text-sm">
+        <h3 class="mb-2 mt-4 text-lg font-bold">Description</h3>
         <div v-html="tour.content"></div>
       </div>
 
@@ -103,12 +109,13 @@
   </div>
 </template>
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch, computed } from "vue";
 import { apiUrl, assetUrl } from "../api.js";
 import DOMpurify from "dompurify";
 import { CheckIcon, InformationCircleIcon } from "@heroicons/vue/16/solid";
 import ContactForm from "./ContactForm.vue";
 import AvailabilityCalendar from "./AvailabilityCalendar.vue";
+import PriceBlock from "./PriceBlock.vue";
 const props = defineProps({
   tour: {
     type: Object,
@@ -127,7 +134,7 @@ const bookingDate = ref("");
 const bookingTime = ref("");
 
 const autoplay = ref(true);
-const intervalMs = 4000; // 4 seconden
+const intervalMs = 5000; // 4 seconden
 
 const contactFormOpen = ref(false);
 
@@ -136,10 +143,14 @@ const openLightbox = () => {
   document.body.classList.add("overflow-hidden");
 };
 
-const closeLightbox = () => {
-  contactFormOpen.value = false;
-  document.body.classList.remove("overflow-hidden");
-};
+const listItems = computed(() => {
+  if (!props.tour.itinerary) return [];
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = props.tour.itinerary;
+  return Array.from(tempDiv.querySelectorAll("li")).map((li) =>
+    DOMpurify.sanitize(li.textContent || ""),
+  );
+});
 
 let timer = null;
 

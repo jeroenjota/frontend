@@ -46,25 +46,6 @@
             ><span v-else>{{ backendOnline.time }}</span>
           </div>
         </div>
-        <!-- Icons 
-        <aside
-          class="flex items-center space-x-4">
-          <button
-            class="relative p-2 text-gray-700 hover:text-cyan-600"
-            aria-label="Wishlist">
-            <Icon icon="mdi:cart-outline" class="h-5 w-5" />
-            <span
-              class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white"
-              >5</span
-            >
-          </button>
-          <button
-            class="relative p-2 text-gray-700 hover:text-cyan-600"
-            aria-label="Wishlist">
-            <Icon icon="mdi:account-outline" class="h-5 w-5" />
-          </button>
-        </aside>
-        -->
         <button
           class="text-gray-600 hover:text-cyan-600 sm:hidden"
           aria-label="Toggle mobile menu"

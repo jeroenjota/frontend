@@ -1,5 +1,7 @@
 <template>
-  <div id="contact" class="scroll-mt-[180px] bg-sky-300 px-4 py-8 sm:px-6 lg:px-8">
+  <div
+    id="contact"
+    class="scroll-mt-45 bg-sky-300 px-4 py-8 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
       <div class="mb-4 text-center">
         <h1
@@ -10,7 +12,8 @@
 
       <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div class="space-y-8">
-          <div class="rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
+          <div
+            class="rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
             <h2 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
               Contact Information
             </h2>
@@ -50,26 +53,13 @@
           </h2>
           <div class="flex items-center gap-2">
             <form class="w-full space-y-2" @submit.prevent="sendMessage">
-              <div class="flex items-center gap-2">
-                <select
-                  v-model="contactForm.title"
-                  required
-                  class="h-10 rounded-lg border-gray-200 px-2 focus:ring-2 focus:ring-sky-500">
-                  <option value="">Title</option>
-                  <option>Mr</option>
-                  <option>Mrs</option>
-                  <option>Ms</option>
-                  <option>Dr</option>
-                </select>
-
+              <div class="flex flex-col items-start gap-2 sm:flex-row">
                 <input
                   v-model="contactForm.name"
                   required
                   type="text"
-                  class="h-10 flex-1 rounded-lg border-gray-200 px-2 focus:ring-2 focus:ring-sky-500"
+                  class="h-10 rounded-lg border-gray-200 px-2 focus:ring-2 focus:ring-sky-500"
                   placeholder="First name" />
-              </div>
-              <div class="flex items-start">
                 <input
                   v-model="contactForm.surname"
                   required
@@ -116,15 +106,37 @@
                     {{ error }}
                   </p>
                 </div>
-                <button type="submit" :disabled="loading" class="btn-primary">
+                <label class="flex items-start gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    v-model="agreedToPrivacy"
+                    class="mt-1 h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500" />
+                  <span>
+                    I have read and agree to the
+                    <button
+                      type="button"
+                      @click="emit('togglePrivacy')"
+                      class="text-cyan-700 underline hover:text-cyan-500">
+                      Privacy Policy
+                    </button>
+                    and
+                    <button
+                      type="button"
+                      @click="emit('toggleTerms')"
+                      class="text-cyan-700 underline hover:text-cyan-500">
+                      Terms & Conditions</button
+                    >.
+                  </span>
+                </label>
+
+                <button
+                  type="submit"
+                  :disabled="loading || !canSend"
+                  class="btn-primary">
                   {{ loading ? "Sending..." : "Send message" }}
                 </button>
               </div>
 
-              <!-- <button
-                class="w-full rounded-lg bg-teal-950 px-6 py-3 font-medium text-white shadow-md transition duration-300 hover:bg-teal-600">
-                Send Message
-              </button> -->
             </form>
           </div>
         </div>
@@ -135,18 +147,43 @@
 <script setup>
 import { apiUrl } from "../api.js";
 import { createContactForm } from "../composables/useContactForm";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+
 const contactForm = createContactForm();
 const loading = ref(false);
 const success = ref(false);
 const error = ref(null);
+const emit = defineEmits(["togglePrivacy", "toggleTerms"]);
+const agreedToPrivacy = ref(false);
+
+// eenvoudige email validatie
+const isValidEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
+
+// computed property die checkt of form verstuurd mag worden
+const canSend = computed(() => {
+  return (
+    agreedToPrivacy.value &&
+    contactForm.surname.trim() !== "" &&
+    isValidEmail(contactForm.email)
+  );
+});
 
 const sendMessage = async () => {
   error.value = null;
+  success.value = false;
+  if (!canSend.value) {
+    error.value =
+      "Please fill in all required fields and agree to the privacy policy.";
+    return;
+  }
+
   loading.value = true;
 
   try {
-    const res = await fetch(apiUrl("/public/contact"), {
+    const res = await fetch(apiUrl("/public/contact/general"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(contactForm),
@@ -155,6 +192,8 @@ const sendMessage = async () => {
     if (!res.ok) throw new Error("Verzenden mislukt");
 
     success.value = true;
+    // clear form if needed
+    // Object.keys(contactForm).forEach(k => contactForm[k] = "");
   } catch (err) {
     error.value = err.message;
   } finally {

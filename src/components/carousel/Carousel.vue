@@ -1,7 +1,7 @@
 <template>
   <div
     ref="container"
-    class="flex gap-6 overflow-x-auto scroll-smooth pb-4">
+    class="flex gap-6 overflow-x-auto scroll-smooth p-4">
     <slot />
   </div>
 </template>

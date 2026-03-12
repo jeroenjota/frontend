@@ -7,7 +7,7 @@
     <Categories @open-tour="openTour" />
     <Offers @open-tour="openTour" />
     <About />
-    <Contact />
+    <Contact @toggle-privacy="togglePrivacy" @toggle-terms="toggleTerms" />
     <Foot @togglePrivacy="togglePrivacy" @toggleTerms="toggleTerms" />
     <TourDetail
       v-if="showTourDetail"
@@ -23,9 +23,8 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import Header from "./components/Header.vue";
-// import Intro from "./components/Intro.vue";
 import Home from "./components/Home.vue";
 import Tours from "./components/Tours.vue";
 import TourDetail from "./components/TourDetail.vue";
@@ -34,16 +33,15 @@ import Offers from "./components/Offers.vue";
 import About from "./components/About.vue";
 import Contact from "./components/Contact.vue";
 import Foot from "./components/Foot.vue";
-import { assetUrl } from "./api";
 import Terms from "./components/Terms.vue";
 import Privacy from "./components/Privacy.vue";
 
-const fotoUrl = assetUrl;
 const selectedTour = ref(null);
 const showTourDetail = ref(false);
 
 const showTerms = ref(false);
 const showPrivacy = ref(false);
+const showToursByCategory = ref(false);
 
 function toggleTerms() {
   showTerms.value = !showTerms.value;
@@ -51,6 +49,10 @@ function toggleTerms() {
 
 function togglePrivacy() {
   showPrivacy.value = !showPrivacy.value;
+}
+
+function toggleToursByCategory() {
+  showToursByCategory.value = !showToursByCategory.value;
 }
 
 function openTour(tour) {
@@ -63,8 +65,13 @@ function closeTour() {
   showTourDetail.value = false;
   selectedTour.value = null;
 }
+watch([showTourDetail, showTerms, showPrivacy], () => {
+  const modalOpen =
+    showTourDetail.value ||
+    showTerms.value ||
+    showPrivacy.value||
+    showToursByCategory.value;
 
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+  document.body.style.overflow = modalOpen ? "hidden" : "";
+});
 </script>
