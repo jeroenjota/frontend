@@ -104,7 +104,8 @@
         :mode="contactMode"
         :preferredDate="bookingDate"
         :startTime="bookingTime"
-        :tourname="tour.title" />
+        :tourname="tour.title"
+        :max-group-size="tour.groupSize" />
     </div>
   </div>
 </template>

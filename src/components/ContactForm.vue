@@ -106,12 +106,13 @@
           <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
             <div class="colspan-1 grid sm:col-span-1">
               <label class="block text-sm font-medium text-gray-700 sm:block"
-                >Group size</label
+                >Group size (max {{ maxGroupSize }})</label
               >
               <input
                 v-model.number="contactForm.groupSize"
                 type="number"
                 min="1"
+                :max="maxGroupSize"
                 placeholder="Number of people"
                 class="form-input sm:placeholder-transparent" />
             </div>
@@ -261,6 +262,7 @@ const props = defineProps({
   mode: { type: String, default: "info" },
   preferredDate: { type: String, default: "" }, // 👈 nieuw
   startTime: { type: String, default: "" }, // 👈 nieuw
+  maxGroupSize: { type: Number, default: 4 }, // 👈 nieuw
 });
 
 const contactForm = createContactForm();
