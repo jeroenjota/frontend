@@ -62,10 +62,10 @@
         <div
           class="flex-1 overflow-auto rounded-lg border border-gray-500 bg-gray-100 p-2 sm:flex-1">
           <AvailabilityCalendar
-            v-if="tour && tour.fromDate && tour.tillDate"
+            v-if="tour"
             :tour-id="tour.id"
-            :from-date="tour.fromDate"
-            :till-date="tour.tillDate"
+            :from-date="safeFallbackFromDate"
+            :till-date="safeFallbackTillDate"
             @select-time="openBooking" />
         </div>
       </div>
@@ -77,7 +77,7 @@
       <div
         class="hover:prose-a:text-blue-800 sm:prose prose-xl prose-blue mt-4 max-h-60 overflow-y-auto rounded-lg bg-gray-100 p-4 text-sm">
         <h3 class="mb-2 mt-4 text-lg font-bold">Description</h3>
-        <div v-html="tour.content"></div>
+        <div v-html="safeContent"></div>
       </div>
 
       <!-- Buttons: full width -->
@@ -113,7 +113,7 @@
 import { onMounted, onUnmounted, ref, watch, computed } from "vue";
 import { apiUrl, assetUrl } from "../api.js";
 import DOMpurify from "dompurify";
-import { CheckIcon, InformationCircleIcon } from "@heroicons/vue/16/solid";
+import { InformationCircleIcon } from "@heroicons/vue/16/solid";
 import ContactForm from "./ContactForm.vue";
 import AvailabilityCalendar from "./AvailabilityCalendar.vue";
 import PriceBlock from "./PriceBlock.vue";
@@ -135,21 +135,24 @@ const bookingDate = ref("");
 const bookingTime = ref("");
 
 const autoplay = ref(true);
-const intervalMs = 5000; // 4 seconden
+const intervalMs = 5000;
 
-const contactFormOpen = ref(false);
-
-const openLightbox = () => {
-  contactFormOpen.value = true;
-  document.body.classList.add("overflow-hidden");
-};
+const safeContent = computed(() =>
+  DOMpurify.sanitize(props.tour.content || "")
+);
+const safeFallbackFromDate = computed(() =>
+  props.tour.fromDate || "2024-01-01"
+);
+const safeFallbackTillDate = computed(() =>
+  props.tour.tillDate || "2099-12-31"
+);
 
 const listItems = computed(() => {
   if (!props.tour.itinerary) return [];
   const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = props.tour.itinerary;
+  tempDiv.innerHTML = DOMpurify.sanitize(props.tour.itinerary);
   return Array.from(tempDiv.querySelectorAll("li")).map((li) =>
-    DOMpurify.sanitize(li.textContent || ""),
+    li.textContent || "",
   );
 });
 
@@ -225,21 +228,14 @@ const openMailForm = () => {
   showMailForm.value = true;
 };
 
-function handleKeydown(event) {
-  // voorlopig niets, voorkomt de fout
+function handleKeydown(e) {
+  if (e.key === "Escape") {
+    emit("close");
+  }
 }
 
 // escape-to-close
 onMounted(() => {
-  const safeContent = DOMpurify.sanitize(props.tour.content) || "";
-  props.tour.content = safeContent;
-  props.tour.fromDate = props.tour.fromDate || "2024-01-01";
-  props.tour.tillDate = props.tour.tillDate || "2099-12-31";
-  const handleKeydown = (e) => {
-    if (e.key === "Escape") {
-      emit("close");
-    }
-  };
   window.addEventListener("keydown", handleKeydown);
   fetchFotos();
   fetchCategories();

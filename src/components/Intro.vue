@@ -13,7 +13,7 @@
             Netherlands.
           </p>
           <div class="mt-2 rounded-md border-2 border-red-900 bg-red-100/50 p-1 text-red-900">
-            <p class="text-xl font-bold">Please note that this website is still under construction</p>
+            <p class="text-xl font-bold">If you want to book a tour, fill in the form and I will be in touch shortly.</p>
             <!-- 
             <p>
               You can not book the various tours through this site yet.
