@@ -92,7 +92,7 @@
                 <!-- INFO -->
                 <div class="mb-4 flex justify-between text-sm font-semibold text-gray-600">
                   <span>{{ tour.duration }} hours</span>
-                  <span>{{ tour.maxpers }} pers</span>
+                  <span>{{ tour.groupsize }} pers</span>
                 </div>
 
                 <!-- PRICE -->

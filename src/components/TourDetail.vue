@@ -19,7 +19,7 @@
       </div>
 
       <!-- Main: Carousel + Calendar -->
-      <div class="flex min-h-fit flex-1 flex-col gap-4 overflow-hidden sm:flex-row">
+      <div class="flex min-h-fit flex-1 flex-col gap-1 overflow-hidden sm:flex-row">
         <!-- Carousel: 2/3 -->
         <div
           class="sm:flex-2 flex flex-1 flex-col items-center overflow-hidden rounded-lg border border-gray-100 bg-gray-100">
@@ -70,13 +70,16 @@
         </div>
       </div>
       <!-- info -->
-      <div class="text-center italic hover:not-italic">
+      <div class="text-primary mt-2 w-full text-center text-lg font-semibold">
+        {{ tour.description }}
+      </div>
+      <div class="w-full text-center italic hover:not-italic">
         Featuring: {{ listItems.join(", ") }}
       </div>
       <!-- Content: full width -->
       <div
-        class="hover:prose-a:text-blue-800 sm:prose prose-xl prose-blue mt-4 max-h-60 overflow-y-auto rounded-lg bg-gray-100 p-4 text-sm">
-        <h3 class="mb-2 mt-4 text-lg font-bold">Description</h3>
+        class="max-h-60 w-full overflow-y-auto rounded-lg border-2 border-gray-300 bg-gray-100 px-4 text-lg text-gray-800">
+        <!-- <h3 class="mb-2 mt-4 text-lg font-bold">Description</h3> -->
         <div v-html="safeContent"></div>
       </div>
 
