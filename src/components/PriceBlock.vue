@@ -13,6 +13,7 @@
         }}
       </span>
       <span class="text-lg font-bold text-white">
+        <span v-if="tour.transportation==='Car'">From </span>
         {{
           new Intl.NumberFormat("nl-NL", {
             style: "currency",

@@ -86,11 +86,21 @@ let rafId = null;
 
 // fetch tours
 const fetchTours = async () => {
-  const res = await fetch(apiUrl("/public/tours"));
-  tours.value = await res.json();
+  try {
+    const res = await fetch(apiUrl("/public/tours?current=true"));
 
-  await nextTick();
-  updateCardScale();
+    if (!res.ok) {
+      throw new Error(`Failed to fetch tours: ${res.status}`);
+    }
+
+    tours.value = await res.json();
+
+    await nextTick();
+    updateCardScale();
+  } catch (error) {
+    console.error("Failed to load tours", error);
+    tours.value = [];
+  }
 };
 
 // auto scroll engine

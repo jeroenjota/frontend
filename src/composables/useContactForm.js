@@ -11,6 +11,7 @@ export function createContactForm() {
     country: "",
     email: "",
     message: "",
+    transportation: "",
     tourId: null,
     tourTitle: "",
     preferredDate: "",

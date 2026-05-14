@@ -6,16 +6,19 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
       @click.self="emit('close')">
       <div
-        class="scroll-mt-45 max-h-[90vh] w-full max-w-xl overflow-auto rounded-2xl border-4 border-blue-500 bg-gray-200 p-6 shadow-2xl">
+        class="scroll-mt-45 max-h-[90vh] w-full max-w-3xl overflow-auto rounded-2xl border-4 border-blue-500 bg-gray-200 p-6 shadow-2xl">
         <h2 class="font-garamond text-primary text-xl sm:text-2xl">
-          {{ subject }}
+          {{ subject }} 
+          <p class="text-right text-lg font-normal">
+          (Base price {{ baseprice > 0 ? formatEuro(baseprice) : "Free info"   }} {{ perpersonprice > 0 ? "+ " + formatEuro(perpersonprice) + " pp" : "" }})
+          </p>
         </h2>
         <p class="text-sm text-gray-600 sm:text-base">
           Please fill in the form below, and we will get back to you as soon as
           possible.
         </p>
         <p
-          class="mb-1 hidden text-sm text-gray-600 sm:mb-2 sm:block sm:text-base">
+          class="mb-1 hidden text-sm text-gray-900 sm:mb-2 sm:block sm:text-base">
           First name, surname, and email are required, but it will help if you
           provide as much information as possible
         </p>
@@ -103,22 +106,9 @@
             </div>
           </div>
           <!-- Tour details -->
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            <div class="colspan-1 grid sm:col-span-1">
-              <label class="block text-sm font-medium text-gray-700 sm:block"
-                >Group size (max {{ maxGroupSize }})</label
-              >
-              <input
-                v-model.number="contactForm.groupSize"
-                type="number"
-                min="1"
-                :max="maxGroupSize"
-                placeholder="Number of people"
-                class="form-input sm:placeholder-transparent" />
-            </div>
-
-            <div class="hidden w-full sm:col-span-1">
-              <div>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-7">
+            <div class="w-full sm:col-span-2">
+              <div class="col-span-2">
                 <label class="text-sm font-medium text-gray-700 sm:block"
                   >Preferred date</label
                 >
@@ -128,22 +118,55 @@
                   class="form-input sm:placeholder-transparent" />
               </div>
             </div>
+
             <!-- language -->
-            <div class="w-full">
+            <div class="col-span-1 w-full">
               <label class="text-sm font-medium text-gray-700 sm:block"
-                >Preferred language</label
+                >Language</label
               >
               <select
                 v-model="contactForm.language"
-                class="form-input sm:placeholder-transparent">
-                <option disabled value="">Language</option>
-                <option value="en">English</option>
-                <option value="nl">Nederlands</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-                <option value="es">Español</option>
+                class="form-input sm:placeholder-transparent" value="Eng">
+                <option value="en">Eng</option>
+                <option value="nl">Ned</option>
+                <option value="fr">Fra</option>
+                <option value="de">Deu</option>
+                <option value="es">Esp</option>
               </select>
             </div>
+            <div class="colspan-1 grid sm:col-span-1">
+              <label class="block text-sm font-medium text-gray-700 sm:block"
+                >Party(max {{ maxGroupSize }})</label
+              >
+              <input
+                v-model.number="contactForm.groupSize"
+                type="number"
+                min="1"
+                :max="maxGroupSize"
+                placeholder="Number of people"
+
+                class="form-input sm:placeholder-transparent" />
+
+            </div>
+            <div class="col-span-3" v-if="transportation==='Car'">  
+              <label class="block text-sm font-medium text-gray-700 sm:block"
+                >Transport
+                <span v-if="contactForm.groupSize===4 && contactForm.transportation==='MyVolvo'"> (4 Maybe tight in the back)</span>
+                </label
+              >
+              <select
+                v-model="contactForm.transportation"
+                class="form-input sm:placeholder-transparent">
+                <option v-if="transportation!=='Car'" value="">{{ transportation }}</option>
+                <option v-else=""
+                  v-for="option in availableTransportOptions"
+                  :key="option.value"
+                  :value="option.value">
+                  {{ option.label }} ({{ option.max }}p, {{ formatEuro(option.price) }} extra)
+                </option>
+              </select>
+            </div>
+
           </div>
 
           <!-- Bericht -->
@@ -153,7 +176,7 @@
             >
             <textarea
               v-model="contactForm.message"
-              rows="5"
+              rows="6"
               class="form-input sm:placeholder-transparent"
               placeholder="Your message"></textarea>
           </div>
@@ -168,7 +191,7 @@
 
           <!-- Actie -->
           <!-- Actions -->
-          <div class="space-y-4">
+          <div class="space-y-1">
             <!-- Privacy agreement -->
             <label class="flex items-start gap-2 text-sm text-gray-700">
               <input
@@ -207,7 +230,7 @@
             </div>
 
             <!-- Buttons -->
-            <div class="flex items-center justify-between pt-2">
+            <div class="flex items-center justify-between">
               <button
                 type="button"
                 @click="emit('close')"
@@ -259,10 +282,13 @@ const emit = defineEmits(["togglePrivacy", "toggleTerms", "close"]);
 const props = defineProps({
   subject: { type: String, default: "" },
   tourname: { type: String, default: "" },
+  baseprice: { type: Number, default: 0 },
+  perpersonprice: { type: Number, default: 0 },
   mode: { type: String, default: "info" },
   preferredDate: { type: String, default: "" }, // 👈 nieuw
   startTime: { type: String, default: "" }, // 👈 nieuw
   maxGroupSize: { type: Number, default: 4 }, // 👈 nieuw
+  transportation: { type: String, default: "" }, // 👈 nieuw
 });
 
 const contactForm = createContactForm();
@@ -290,15 +316,16 @@ const initializeForm = () => {
   // Berichten afhankelijk van mode
   if (props.mode === "booking") {
     contactForm.message = `I would like to book
-Tour: ${props.tourname}
-Date: ${props.preferredDate || "[please suggest a date]"}
-Start time: ${props.startTime || "[please suggest a time]"}
-Please contact me with more details.`;
+    Tour: ${props.tourname}
+    Date: ${props.preferredDate || "[please suggest a date]"}
+    Start time: ${props.startTime || "[please suggest a time]"}
+Please contact me with more details.
+Thank you.`;
   } else if (props.mode === "info") {
     contactForm.message = `I would like to know more about your tour
-  "${props.tourname}"
-Please contact me,
-thank you.`;
+    "${props.tourname}"
+Please contact me.
+Thank you.`;
   } else {
     contactForm.message = "";
   }
@@ -316,6 +343,50 @@ const isValid = computed(() => {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)
   );
 });
+/* -----------------------
+   Transportation methods + prices
+------------------------*/
+const transportOptions = [
+  { value: "MyVolvo", label: "My Volvo V70", max: 4, price: 0 },
+  { value: "Rent-SUV", label: "SUV rental", max: 4, price: 150 },
+  { value: "Rent-Vito", label: "Mercedes Vito", max: 8, price: 250 },
+  { value: "Rent-Lux", label: "Mercedes V-Class", max: 7, price: 350 },
+];
+
+const formatEuro = (amount) => {
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency: "EUR",
+  }).format(amount);
+};
+
+const availableTransportOptions = computed(() => {
+  const size = Number(contactForm.groupSize) || 1;
+  return transportOptions.filter((option) => size <= option.max);
+});
+
+const choice4GroupSize = computed(() => {
+  if (contactForm.groupSize === 4) {
+    return "Maybe tight in the back)";
+  }
+  else {
+    return "";
+  }   
+});
+
+watch(
+  () => contactForm.groupSize,
+  () => {
+    const isCurrentSelectionValid = availableTransportOptions.value.some(
+      (option) => option.value === contactForm.transportation,
+    );
+
+    if (!isCurrentSelectionValid) {
+      contactForm.transportation = availableTransportOptions.value[0]?.value || "";
+    }
+  },
+  { immediate: true },
+);
 
 /* -----------------------
    Auto close after success

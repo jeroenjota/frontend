@@ -189,7 +189,7 @@ const sendMessage = async () => {
       body: JSON.stringify(contactForm),
     });
 
-    if (!res.ok) throw new Error("Verzenden mislukt");
+    if (!res.ok) throw new Error("Sending failed");
 
     success.value = true;
     // clear form if needed

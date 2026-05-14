@@ -3,10 +3,10 @@
     class="z-9999 fixed inset-0 flex items-center justify-center bg-black/60 p-2 sm:p-4"
     @click.self="emit('close')">
     <div
-      class="max-w-200 flex max-h-[95vh] w-full flex-col overflow-hidden rounded-lg border-4 border-blue-800 bg-gray-100 p-4 shadow-2xl">
+      class="max-w-200 flex max-h-[85vh] w-full flex-col overflow-hidden rounded-lg border-4 border-blue-800 bg-gray-100 p-4 shadow-2xl">
       <!-- Header -->
       <div
-        class="bg-primary mb-4 flex w-full flex-col gap-1 rounded-lg p-4 text-white sm:flex-row sm:items-center sm:justify-between">
+        class="bg-primary mb-2 flex w-full flex-col gap-1 rounded-lg p-2 text-white sm:flex-row sm:items-center sm:justify-between sm:p-4">
         <div class="flex-2 flex gap-1">
           <h2 class="text-xl font-bold sm:text-2xl">{{ tour.title }}</h2>
         </div>
@@ -30,7 +30,7 @@
             <div
               v-if="loading"
               class="flex h-64 items-center justify-center text-gray-500">
-              Laden…
+              Loading...
             </div>
             <div v-else class="inline-flex w-full flex-col items-center">
               <div class="flex w-full justify-center">
@@ -70,15 +70,15 @@
         </div>
       </div>
       <!-- info -->
-      <div class="text-primary mt-2 w-full text-center text-lg font-semibold">
+      <div class="text-primary mt-2 w-full text-center font-semibold sm:text-lg">
         {{ tour.description }}
       </div>
-      <div class="w-full text-center italic hover:not-italic">
+      <div class="w-full text-center text-sm italic text-gray-600 hover:not-italic sm:text-base">
         Featuring: {{ listItems.join(", ") }}
       </div>
       <!-- Content: full width -->
       <div
-        class="max-h-60 w-full overflow-y-auto rounded-lg border-2 border-gray-300 bg-gray-100 px-4 text-lg text-gray-800">
+        class="tour-content max-h-60 w-full overflow-y-auto rounded-lg border-2 border-gray-300 bg-gray-100 px-4 text-gray-800 sm:text-base">
         <!-- <h3 class="mb-2 mt-4 text-lg font-bold">Description</h3> -->
         <div v-html="safeContent"></div>
       </div>
@@ -93,7 +93,7 @@
         <button
           class="rounded bg-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-400"
           @click="emit('close')">
-          Sluiten
+          Close
         </button>
       </div>
 
@@ -108,7 +108,10 @@
         :preferredDate="bookingDate"
         :startTime="bookingTime"
         :tourname="tour.title"
-        :max-group-size="tour.groupSize" />
+        :baseprice="Number(tour.price)"
+        :perpersonprice="Number(tour.pprice)"
+        :transportation="tour.transportation"
+        :max-group-size="Number(tour.groupSize)" />
     </div>
   </div>
 </template>
@@ -140,8 +143,24 @@ const bookingTime = ref("");
 const autoplay = ref(true);
 const intervalMs = 5000;
 
+const SAFE_HTML_OPTIONS = {
+  USE_PROFILES: { html: true },
+  ALLOWED_TAGS: [
+    "p", "br", "strong", "em", "b", "i", "u",
+    "ul", "ol", "li", "h3", "h4", "blockquote",
+    "a", "span", "div",
+  ],
+  ALLOWED_ATTR: ["href", "target", "rel", "title", "class"],
+  FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "form", "input", "button", "textarea"],
+  FORBID_ATTR: ["style"],
+  ALLOW_DATA_ATTR: false,
+};
+
+const sanitizeRichHtml = (html = "") =>
+  DOMpurify.sanitize(html, SAFE_HTML_OPTIONS);
+
 const safeContent = computed(() =>
-  DOMpurify.sanitize(props.tour.content || "")
+  sanitizeRichHtml(props.tour.content || "")
 );
 const safeFallbackFromDate = computed(() =>
   props.tour.fromDate || "2024-01-01"
@@ -153,7 +172,7 @@ const safeFallbackTillDate = computed(() =>
 const listItems = computed(() => {
   if (!props.tour.itinerary) return [];
   const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = DOMpurify.sanitize(props.tour.itinerary);
+  tempDiv.innerHTML = sanitizeRichHtml(props.tour.itinerary);
   return Array.from(tempDiv.querySelectorAll("li")).map((li) =>
     li.textContent || "",
   );
@@ -267,3 +286,46 @@ watch(
   { immediate: true },
 );
 </script>
+
+<style scoped>
+.tour-content :deep(ul) {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.tour-content :deep(ol) {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.tour-content :deep(p) {
+  margin: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+
+
+.tour-content :deep(ul),
+.tour-content :deep(ol) {
+  list-style-position: outside;
+}
+
+.tour-content :deep(li) {
+  /* margin: 0.15rem 0; */
+  font-size: 0.85rem;
+}
+
+.tour-content :deep(ul li::marker) {
+  color: var(--primary);
+}
+
+.tour-content :deep(h3) {
+  color: var(--color-primary);
+}
+
+.tour-content :deep(.ql-align-center) {
+  text-align: center;
+}
+</style>
