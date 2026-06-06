@@ -3,7 +3,7 @@
     <Header />
     <Home />
     <!-- <Intro /> -->
-    <Tours v-if="!showTourDetail" @open-tour="openTour" />
+    <!-- <Tours v-if="!showTourDetail" @open-tour="openTour" /> -->
     <Categories @open-tour="openTour" />
     <Offers @open-tour="openTour" />
     <About />
