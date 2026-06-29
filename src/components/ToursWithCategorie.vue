@@ -1,6 +1,6 @@
 <template>
   <div
-    class="scroll-mt-65 fixed inset-0 z-50 flex justify-center bg-black/60"
+    class="scroll-mt-65 fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4"
     @click.self="emit('close')">
     <div>
       <div

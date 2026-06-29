@@ -1,6 +1,6 @@
 <template>
   <section id="footer" class="text-primary bg-sky-200">
-    <div class="mx-auto max-w-7xl px-4">
+    <div class="mx-auto max-w-5xl px-4">
       <div
         class="mb-1 flex flex-col gap-3 border-gray-700 py-2 md:flex-row md:justify-between">
         <!-- friendsLinks -->

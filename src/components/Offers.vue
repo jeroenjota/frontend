@@ -1,17 +1,22 @@
 <template>
   <section id="discounts" class="scroll-mt-45 bg-sky-200 py-8">
-    <main class="mx-auto max-w-7xl px-4">
+    <main class="mx-auto max-w-5xl px-4">
       <!-- HEADER -->
-      <header class="mb-4 flex items-center justify-between">
-        <h2 class="font-garamond text-primary text-2xl font-bold sm:text-4xl">Discounts</h2>
-        <p class="mx-auto max-w-2xl text-lg text-gray-800">
-          <span v-if="tours.length === 0">
-            No tours with discount at the moment
-          </span>
-          <span v-else>Limited time discount for these tours</span>
-        </p>
+      <header class="mb-4 flex flex-col items-center justify-between">
+        <div>
+          <h2
+            class="font-garamond text-primary text-center text-2xl font-bold sm:text-4xl">
+            Discounts
+          </h2>
+          <p class="mx-auto max-w-2xl text-lg text-gray-800">
+            <span v-if="tours.length === 0">
+              No tours with discount at the moment
+            </span>
+            <span v-else>Limited time discount for these tours</span>
+          </p>
+        </div>
 
-        <div class="flex gap-3">
+    <div v-if="tours.length > 2" class="flex gap-3">
           <button
             @click="scrollLeft"
             class="rounded-full bg-white p-2 shadow hover:bg-sky-100">
@@ -34,7 +39,7 @@
           <li
             v-for="tour in tours"
             :key="tour.id"
-            class="min-w-[85%] shrink-0 sm:min-w-[45%] lg:min-w-[30%]">
+            class="min-w-[85%] sm:min-w-[45%] lg:min-w-[30%]">
             <article
               @click="$emit('open-tour', tour)"
               class="cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition hover:scale-[1.02]">
@@ -87,9 +92,10 @@
                   </div>
 
                   <!-- PRICE -->
-                  <footer class="flex items-center justify-between rounded bg-blue-500 px-2 py-1 text-sm font-bold text-white">
+                  <footer
+                    class="flex items-center justify-between rounded bg-blue-500 px-2 py-1 text-sm font-bold text-white">
                     <div class="flex flex-row gap-2">
-                    <PriceBlock :tour="tour" />
+                      <PriceBlock :tour="tour" />
                     </div>
 
                     <button
@@ -103,7 +109,7 @@
           </li>
         </ul>
       </div>
-      <div class="ml-8 flex flex-row items-center justify-end">
+      <div v-if="showTourist" class="ml-8 flex flex-row items-center justify-end">
         <h2 class="">
           <img
             :src="assetUrl('/uploads/system/tourist_qrcode.png')"
@@ -130,6 +136,7 @@ import PriceBlock from "./PriceBlock.vue";
 const currentSlide = ref(0);
 const toursPerPage = ref(3);
 const tours = ref([]);
+const showTourist = ref(false)
 
 const totalSlides = computed(() => {
   return Math.ceil(tours.value.length / toursPerPage.value);

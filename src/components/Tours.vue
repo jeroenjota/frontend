@@ -1,17 +1,17 @@
 <template>
   <section id="tours" class="scroll-mt-45 bg-cyan-800 py-4">
-    <main class="mx-auto max-w-7xl px-4">
+    <main class="mx-auto max-w-6xl px-4">
       <h2
         class="font-garamond mb-2 text-center text-2xl font-bold text-gray-300 sm:text-4xl">
-        Featured Tours
+        All Tours
       </h2>
 
-      <div class="relative z-0 rounded-2xl p-2 shadow-lg">
+      <div class="relative z-0 rounded-2xl p-2 px-4 shadow-lg">
         <!-- LEFT BUTTON -->
         <button
           @mouseenter="startAutoScroll('right')"
           @click="startAutoScroll('right')"
-          class="z-500 top-19/20 group absolute left-4 -translate-y-1/2 rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition hover:scale-110 hover:bg-white">
+          class="z-500 top-19/20 group absolute left-4 -translate-y-1/2 rounded-full p-3 shadow-lg backdrop-blur transition hover:scale-110 hover:bg-white">
           <svg
             class="h-6 w-6 text-gray-700 transition group-hover:-translate-x-0.5"
             fill="none"
@@ -44,9 +44,11 @@
 
         <!-- fade -->
         <div
-          class="bg-linear-to-r w-50 pointer-events-none absolute left-0 top-0 h-full from-gray-200"></div>
+          class="bg-linear-to-r w-50 pointer-events-none absolute left-0 top-0 h-full from-cyan-700">
+        </div>
         <div
-          class="bg-linear-to-l w-50 pointer-events-none absolute right-0 top-0 h-full from-gray-200"></div>
+          class="bg-linear-to-l w-50 pointer-events-none absolute right-0 top-0 h-full from-cyan-700">
+        </div>
 
         <!-- CAROUSEL -->
         <div

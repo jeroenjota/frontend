@@ -2,15 +2,15 @@
   <div
     id="about"
     class="bg-linear-to-r scroll-mt-45 from-sky-200 to-sky-300 px-4 py-6 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
+    <div class="mx-auto max-w-5xl rounded-2xl border-2 border-gray-300 bg-sky-100 p-4 shadow-xl sm:p-6 lg:p-8">
       <h2
         class="font-garamond text-primary mb-4 text-center text-2xl font-bold sm:text-3xl md:text-4xl">
         About Me
       </h2>
       <!-- Eerste alinea full width -->
-      <p class="text-xl leading-relaxed md:text-3xl">
+      <H3 class="text-xl leading-relaxed md:text-3xl">
         {{ text[0] }}
-      </p>
+      </H3>
       <!-- Foto jeroen -->
       <img
         class="float-right mb-4 ml-4 w-48 rounded-full"
@@ -57,8 +57,8 @@
         <p class="mt-4 text-lg leading-relaxed">{{ text[7] }}</p>
         <!-- Carousel -->
       </div>
-    </div>
         <p class="mt-4 text-lg leading-relaxed">{{ text[8] }}</p>
+    </div>
   </div>
 </template>
 

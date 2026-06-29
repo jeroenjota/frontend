@@ -2,7 +2,7 @@
   <div
     id="contact"
     class="scroll-mt-45 bg-sky-300 px-4 py-8 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-7xl">
+    <div class="mx-auto max-w-5xl">
       <div class="mb-4 text-center">
         <h1
           class="font-garamond text-primary text-2xl font-bold sm:text-3xl md:text-4xl">

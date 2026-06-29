@@ -120,14 +120,6 @@ const navItems = [
   },
   {
     id: 2,
-    name: "Tours",
-    link: "#tours",
-    loc: "internal",
-    icon: "mdi:map-search-outline",
-    showItem: true,
-  },
-  {
-    id: 3,
     name: "Categories",
     link: "#categories",
     loc: "internal",
@@ -135,11 +127,19 @@ const navItems = [
     showItem: true,
   },
   {
-    id: 4,
+    id: 3,
     name: "Discounts",
     link: "#discounts",
     loc: "internal",
     icon: "mdi:tag-outline",
+    showItem: true,
+  },
+  {
+    id: 4,
+    name: "All Tours",
+    link: "#tours",
+    loc: "internal",
+    icon: "mdi:map-search-outline",
     showItem: true,
   },
   {

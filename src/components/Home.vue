@@ -4,7 +4,7 @@
     class="relative flex items-center justify-center bg-cover bg-center bg-no-repeat p-2"
     :style="{ backgroundImage: `url(${fotoUrl('/uploads/system/main.jpg')})` }"
   >
-    <div class="relative z-10 w-full max-w-7xl px-4 md:px-6 lg:px-8">
+    <div class="relative z-10 w-full max-w-6xl px-4 md:px-6 lg:px-8">
       <div class="text-center lg:text-left">
         <div class="relative z-10 mx-auto w-full">
           <!-- ✅ hier bepaal je de breedte -->

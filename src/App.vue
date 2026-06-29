@@ -3,11 +3,11 @@
     <Header />
     <Home />
     <!-- <Intro /> -->
-    <!-- <Tours v-if="!showTourDetail" @open-tour="openTour" /> -->
     <Categories @open-tour="openTour" />
     <Offers @open-tour="openTour" />
     <About />
     <Contact @toggle-privacy="togglePrivacy" @toggle-terms="toggleTerms" />
+    <Tours v-if="!showTourDetail" @open-tour="openTour" />
     <Foot @togglePrivacy="togglePrivacy" @toggleTerms="toggleTerms" />
     <TourDetail
       v-if="showTourDetail"
