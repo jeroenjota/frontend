@@ -130,8 +130,8 @@ const currentMonthName = computed(() =>
 );
 
 // Tour min/max dates
-const minDate = new Date(props.fromDate);
-const maxDate = new Date(props.tillDate);
+const minDate = props.fromDate.slice(0, 10);
+const maxDate = props.tillDate.slice(0, 10);
 
 // -------------------- Month Grid --------------------
 const monthDays = computed(() => {
@@ -218,7 +218,7 @@ function dayClass(day) {
   const base =
     "cursor-pointer aspect-square flex items-center justify-center rounded text-xs sm:text-sm";
 
-  if (day < minDate || day > maxDate)
+  if (dateStr < minDate || dateStr > maxDate)
     return `${base} bg-gray-200 text-gray-400 cursor-not-allowed`;
 
   const slots = monthAvailability.value[dateStr];
