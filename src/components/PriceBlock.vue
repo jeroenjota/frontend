@@ -27,7 +27,7 @@
           new Intl.NumberFormat("nl-NL", {
             style: "currency",
             currency: "EUR",
-          }).format(Number(tour.pprice) * (1 - tour.discount / 100))
+          }).format(Number(tour.pprice))
         }}
         pp</span
       >

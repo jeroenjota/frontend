@@ -1,7 +1,5 @@
 <template>
-  <div
-    id="contact"
-    class="scroll-mt-45 bg-sky-300 px-4 py-8 sm:px-6 lg:px-8">
+  <div id="contact" class="scroll-mt-45 bg-sky-300 px-4 py-8 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-5xl">
       <div class="mb-4 text-center">
         <h1
@@ -15,42 +13,31 @@
           <div
             class="rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
             <h2 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
-              Contact Information
+              Yes, get in touch! 
             </h2>
-            <div class="space-y-6">
-              <div class="flex items-start">
-                <div class="mr-4 rounded-full bg-emerald-500 p-3">
-                  <Icon icon="mdi:phone" class="h-6 w-6 text-teal-50" />
-                </div>
-                <div>
-                  <h3 class="text-lg font-medium text-gray-950">Phone</h3>
-                  <p class="text-gray-700">+31 6 4711 6541</p>
-                </div>
-              </div>
-              <div class="flex items-start">
-                <div class="mr-4 rounded-full bg-emerald-500 p-3">
-                  <Icon icon="mdi:envelope" class="h-6 w-6 text-teal-50" />
-                </div>
-                <div>
-                  <h3 class="text-lg font-medium text-gray-950">Email</h3>
-                  <p class="text-gray-700">info@jota.nl</p>
-                  <p class="text-gray-700">jeroen@jota.nl</p>
-                </div>
-              </div>
-            </div>
             <p
-              class="mx-auto mt-6 max-w-4xl border-t-2 pt-6 text-lg text-gray-800">
+              class="mx-auto mb-6 mt-6 max-w-4xl border-t-2 pt-6 text-gray-800 lg:text-lg">
               I'd love to hear from you! Whether you have questions about the
               tours, need assistance with bookings, or just want to say hello,
-              feel free to reach out.
+              feel free to reach out.<br /> 
+
             </p>
+            <p class="mt-12 text-gray-800 lg:text-lg">Leave your credentials in the form on the right, and I will be in touch as soon as possible.</p>
+            <p class="text-gray-800 lg:text-lg">I hope to hear from you soon ...</p>
           </div>
         </div>
         <div
           class="w-full rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
-          <h2 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
-            Send us a message
-          </h2>
+          <div class="space-y-6">
+            <div class="flex items-start">
+              <div class="mr-4 rounded-full bg-emerald-500 p-3"> 
+              <Icon icon="mdi:envelope" class="h-6 w-6 text-teal-50" />
+                </div>  
+            <h3 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
+              Send us a message
+            </h3>
+            </div>
+          </div>
           <div class="flex items-center gap-2">
             <form class="w-full space-y-2" @submit.prevent="sendMessage">
               <div class="flex flex-col items-start gap-2 sm:flex-row">
@@ -129,14 +116,15 @@
                   </span>
                 </label>
 
+              </div>
+              <div class="flex items-center justify-center">
                 <button
                   type="submit"
                   :disabled="loading || !canSend"
-                  class="btn-primary">
-                  {{ loading ? "Sending..." : "Send message" }}
+                  class="btn-primary flex items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2 text-white hover:bg-cyan-700 disabled:cursor-not-allowed disabled:bg-gray-400">
+                  {{ loading ? "Sending..." : "Send" }}
                 </button>
               </div>
-
             </form>
           </div>
         </div>
