@@ -1,4 +1,4 @@
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 export function useCarousel() {
   const container = ref(null);
@@ -29,15 +29,18 @@ export function useCarousel() {
     el.scrollBy({ left: 400, behavior: "smooth" });
   };
 
-  onMounted(async () => {
-    await nextTick();
-
+  onMounted(() => {
     const el = container.value;
     if (!el) return;
 
     updateScrollState();
     el.addEventListener("scroll", updateScrollState);
     window.addEventListener("resize", updateScrollState);
+  });
+
+  onBeforeUnmount(() => {
+    container.value?.removeEventListener("scroll", updateScrollState);
+    window.removeEventListener("resize", updateScrollState);
   });
 
   return {

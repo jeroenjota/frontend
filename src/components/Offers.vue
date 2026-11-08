@@ -1,6 +1,7 @@
 <template>
-  <section id="discounts" class="scroll-mt-45 bg-sky-200 py-8">
-    <main class="mx-auto max-w-5xl px-4">
+  <section id="discounts" class="scroll-mt-45 bg-transparent px-4 py-8">
+    <main
+      class="mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
       <!-- HEADER -->
       <header class="mb-4 flex flex-col items-center justify-between">
         <div>
@@ -16,16 +17,22 @@
           </p>
         </div>
 
-    <div v-if="tours.length > 2" class="flex gap-3">
+        <div v-if="canScrollLeft || canScrollRight" class="flex gap-3">
           <button
+            type="button"
+            aria-label="Previous offers"
+            :disabled="!canScrollLeft"
             @click="scrollLeft"
-            class="rounded-full bg-white p-2 shadow hover:bg-sky-100">
+            class="rounded-full bg-white p-2 shadow hover:bg-sky-100 disabled:opacity-30">
             <Icon icon="line-md:arrow-small-left" width="28" />
           </button>
 
           <button
+            type="button"
+            aria-label="Next offers"
+            :disabled="!canScrollRight"
             @click="scrollRight"
-            class="rounded-full bg-white p-2 shadow hover:bg-sky-100">
+            class="rounded-full bg-white p-2 shadow hover:bg-sky-100 disabled:opacity-30">
             <Icon icon="line-md:arrow-small-right" width="28" />
           </button>
         </div>
@@ -33,9 +40,7 @@
 
       <!-- CAROUSEL -->
       <div class="relative">
-        <ul
-          ref="carousel"
-          class="scrollbar-hide flex gap-6 overflow-x-auto scroll-smooth">
+        <ul ref="carousel" class="flex gap-6 overflow-x-auto scroll-smooth">
           <li
             v-for="tour in tours"
             :key="tour.id"
@@ -71,9 +76,13 @@
                           ? 'text-yellow-400'
                           : 'text-gray-300'
                       " />
-                    <span class="ml-1 text-sm text-gray-500">
-                      ({{ Number(tour.rating).toFixed(1) }})
-                    </span>
+                    <div
+                      class="flex w-full flex-row items-center justify-between">
+                      <span class="ml-1 text-sm text-gray-500">
+                        ({{ Number(tour.rating).toFixed(1) }} )
+                      </span>
+                      <ReviewLink :tour="tour" class="text-primary" />
+                    </div>
                   </div>
 
                   <!-- TITLE -->
@@ -109,7 +118,9 @@
           </li>
         </ul>
       </div>
-      <div v-if="showTourist" class="ml-8 flex flex-row items-center justify-end">
+      <div
+        v-if="showTourist"
+        class="ml-8 flex flex-row items-center justify-end">
         <h2 class="">
           <img
             :src="assetUrl('/uploads/system/tourist_qrcode.png')"
@@ -126,47 +137,27 @@
 
 <script setup>
 import { Icon } from "@iconify/vue";
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { apiUrl, assetUrl } from "../api.js";
+import { useCarousel } from "../composables/useCarousel.js";
 import PriceBlock from "./PriceBlock.vue";
+import ReviewLink from "./ReviewLink.vue";
 //  Moved to App.vue
 // import TourDetail from "./TourDetail.vue";
 // const emit = defineEmits(["open-tour"]);
 
-const currentSlide = ref(0);
-const toursPerPage = ref(3);
 const tours = ref([]);
-const showTourist = ref(false)
+const showTourist = ref(false);
+const {
+  container: carousel,
+  canScrollLeft,
+  canScrollRight,
+  scrollLeft,
+  scrollRight,
+  updateScrollState,
+} = useCarousel();
 
-const totalSlides = computed(() => {
-  return Math.ceil(tours.value.length / toursPerPage.value);
-});
-
-const visibleTours = computed(() => {
-  const start = currentSlide.value * toursPerPage.value;
-  const tourSet = tours.value.slice(start, start + toursPerPage.value);
-  return tourSet;
-});
-
-const nextSlide = () => {
-  currentSlide.value =
-    currentSlide.value === totalSlides.value - 1 ? 0 : currentSlide.value + 1;
-};
-const prevSlide = () => {
-  currentSlide.value =
-    currentSlide.value === 0 ? totalSlides.value - 1 : currentSlide.value - 1;
-};
-
-const handleResize = () => {
-  const width = window.innerWidth;
-  if (width < 640) {
-    toursPerPage.value = 1;
-  } else if (width >= 640 && width < 1024) {
-    toursPerPage.value = 2;
-  } else {
-    toursPerPage.value = 3;
-  }
-};
+watch(tours, updateScrollState, { flush: "post" });
 
 const fetchTours = async () => {
   try {
@@ -185,12 +176,5 @@ const fetchTours = async () => {
 
 onMounted(() => {
   fetchTours();
-  handleResize();
-  window.addEventListener("resize", handleResize);
-  // Fetch tours data from an API or local data source
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", handleResize);
 });
 </script>

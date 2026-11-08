@@ -1,6 +1,6 @@
 <template>
-  <div id="contact" class="scroll-mt-45 bg-sky-300 px-4 py-8 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-5xl">
+  <div id="contact" class="scroll-mt-45 bg-transparent px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
       <div class="mb-4 text-center">
         <h1
           class="font-garamond text-primary text-2xl font-bold sm:text-3xl md:text-4xl">
@@ -11,7 +11,7 @@
       <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
         <div class="space-y-8">
           <div
-            class="rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
+            class="rounded-lg border border-gray-100 bg-white/60 p-8 shadow-xl">
             <h2 class="mb-6 font-serif text-2xl font-semibold text-gray-900">
               Yes, get in touch! 
             </h2>
@@ -27,7 +27,7 @@
           </div>
         </div>
         <div
-          class="w-full rounded-lg border border-gray-100 bg-gray-200 p-8 shadow-xl">
+          class="w-full rounded-lg border border-gray-100 bg-white/60 p-8 shadow-xl">
           <div class="space-y-6">
             <div class="flex items-start">
               <div class="mr-4 rounded-full bg-emerald-500 p-3"> 

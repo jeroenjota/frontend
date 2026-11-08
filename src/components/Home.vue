@@ -1,16 +1,11 @@
 <template>
-<section id="home" class="scroll-mt-[200px] bg-sky-200 py-0">
-  <div
-    class="relative flex items-center justify-center bg-cover bg-center bg-no-repeat p-2"
-    :style="{ backgroundImage: `url(${fotoUrl('/uploads/system/main.jpg')})` }"
-  >
-    <div class="relative z-10 w-full max-w-6xl px-4 md:px-6 lg:px-8">
+    <section id="home" class="scroll-mt-50 bg-transparent px-4 pt-4" >
+    <div class="relative mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
+
+    <div class="relative z-10 w-full max-w-5xl px-4 md:px-6 lg:px-8">
       <div class="text-center lg:text-left">
         <div class="relative z-10 mx-auto w-full">
           <!-- ✅ hier bepaal je de breedte -->
-          <div
-            class="w-full rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md"
-          >
             <Intro />
             <div class="mt-1 flex justify-center gap-4">
               <a
@@ -26,7 +21,6 @@
               >
                 Special offers
               </a>
-            </div>
           </div>
         </div>
       </div>
@@ -35,10 +29,6 @@
 </section>
 </template>
 <script setup>
-// public/img/keukenhof02.jpg
-// import mainImage from "../img/keukenhof02.jpg";
-import { assetUrl } from "../api";
-const fotoUrl = assetUrl;
 import Intro from "./Intro.vue";
 </script>
 <style lang=""></style>

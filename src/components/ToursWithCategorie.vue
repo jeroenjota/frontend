@@ -34,6 +34,7 @@
                 <h3 class="mb-2 text-lg font-medium text-gray-200">
                   {{ tour.title }}
                 </h3>
+                <ReviewLink :tour="tour" class="text-white" @navigate="emit('close')" />
                 <div
                   class="bg-primary m-0 flex flex-col gap-4 overflow-hidden rounded-lg shadow-sm md:flex-row">
                   <!-- Image -->
@@ -80,6 +81,7 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { apiUrl, assetUrl } from "../api.js";
 import PriceBlock from "./PriceBlock.vue";
+import ReviewLink from "./ReviewLink.vue";
 const emit = defineEmits(["close", "open-tour"]);
 
 const props = defineProps({

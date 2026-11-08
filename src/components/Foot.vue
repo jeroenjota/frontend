@@ -1,11 +1,11 @@
 <template>
-  <section id="footer" class="text-primary bg-sky-200">
-    <div class="mx-auto max-w-5xl px-4">
+  <section id="footer" class="text-primary bg-transparent px-4">
+    <div class="mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
       <div
         class="mb-1 flex flex-col gap-3 border-gray-700 py-2 md:flex-row md:justify-between">
         <!-- friendsLinks -->
         <div
-          class="w-full rounded-lg border border-gray-400 bg-gray-300 px-4 py-4 shadow-2xl">
+          class="w-full rounded-lg border border-gray-400 bg-white/60 px-4 py-4 shadow-2xl">
           <h3 class="font-garamond mb-4 text-lg font-semibold sm:text-3xl">
             Friends
           </h3>
@@ -26,7 +26,7 @@
           </ul>
         </div>
         <div
-          class="w-full rounded-lg border border-gray-400 bg-gray-300 px-4 py-4 shadow-2xl">
+          class="w-full rounded-lg border border-gray-400 bg-white/60 px-4 py-4 shadow-2xl">
           <!-- Quick Links -->
           <h3 class="font-garamond mb-4 text-lg font-semibold sm:text-3xl">
             Quick Links
@@ -42,7 +42,7 @@
         </div>
         <!-- Customer services -->
         <div
-          class="w-full rounded-lg border border-gray-400 bg-gray-300 px-4 py-4 shadow-2xl">
+          class="w-full rounded-lg border border-gray-400 bg-white/60 px-4 py-4 shadow-2xl">
           <h3 class="font-garamond mb-4 text-lg font-semibold sm:text-3xl">
             Customer Service
           </h3>

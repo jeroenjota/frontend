@@ -3,12 +3,12 @@
     <main class="h-full flex-1 overflow-y-auto overscroll-contain">
       <!-- section header -->
       <div class="mb-4 text-center">
-        <h2 class="font-garamond text-primary text-xl font-bold md:text-3xl">
+        <h2 class="font-garamond text-primary text-2xl md:text-4xl">
           Welcome to Jota Services
         </h2>
         
         <div class="text-primary font-garamond mt-2 px-4">
-          <p class="sm:text-lg md:text-2xl lg:text-3xl">
+          <p class="sm:text-lg md:text-2xl lg:text-2xl">
             Jota Services focuses on offering unique and personalized tours in the
             Netherlands.
           </p>

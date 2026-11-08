@@ -16,6 +16,7 @@
           <span>{{ tour.groupSize }} p</span>
           <PriceBlock :tour="tour" />
         </div>
+        <ReviewLink :tour="tour" @navigate="emit('close')" />
       </div>
 
       <!-- Main: Carousel + Calendar -->
@@ -123,6 +124,7 @@ import { InformationCircleIcon } from "@heroicons/vue/16/solid";
 import ContactForm from "./ContactForm.vue";
 import AvailabilityCalendar from "./AvailabilityCalendar.vue";
 import PriceBlock from "./PriceBlock.vue";
+import ReviewLink from "./ReviewLink.vue";
 const props = defineProps({
   tour: {
     type: Object,

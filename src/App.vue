@@ -1,13 +1,18 @@
 <template>
-  <div class="min-h-screen bg-cover bg-center">
+  <div class="relative isolate min-h-screen">
+    <div
+      aria-hidden="true"
+      class="fixed inset-0 -z-10 bg-sky-200 bg-cover bg-center bg-no-repeat"
+      :style="{ backgroundImage: `url(${assetUrl('/uploads/system/main.jpg')})` }" />
     <Header />
     <Home />
     <!-- <Intro /> -->
     <Categories @open-tour="openTour" />
     <Offers @open-tour="openTour" />
+    <Tours v-if="!showTourDetail" @open-tour="openTour" />
+    <Reviews />
     <About />
     <Contact @toggle-privacy="togglePrivacy" @toggle-terms="toggleTerms" />
-    <Tours v-if="!showTourDetail" @open-tour="openTour" />
     <Foot @togglePrivacy="togglePrivacy" @toggleTerms="toggleTerms" />
     <TourDetail
       v-if="showTourDetail"
@@ -24,6 +29,7 @@
 </template>
 <script setup>
 import { ref, watch } from "vue";
+import { assetUrl } from "./api.js";
 import Header from "./components/Header.vue";
 import Home from "./components/Home.vue";
 import Tours from "./components/Tours.vue";
@@ -34,6 +40,7 @@ import About from "./components/About.vue";
 import Contact from "./components/Contact.vue";
 import Foot from "./components/Foot.vue";
 import Terms from "./components/Terms.vue";
+import Reviews from "./components/Reviews.vue";
 import Privacy from "./components/Privacy.vue";
 
 const selectedTour = ref(null);

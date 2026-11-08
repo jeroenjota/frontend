@@ -1,8 +1,8 @@
 <template>
-  <section id="tours" class="scroll-mt-45 bg-cyan-800 py-4">
-    <main class="mx-auto max-w-6xl px-4">
+  <section id="tours" class="scroll-mt-45 bg-transparent px-4 py-4">
+    <main class="mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
       <h2
-        class="font-garamond mb-2 text-center text-2xl font-bold text-gray-300 sm:text-4xl">
+        class="font-garamond text-primary mb-2 text-center text-2xl font-bold sm:text-4xl">
         All Tours
       </h2>
 
@@ -41,14 +41,6 @@
               d="M9 5l7 7-7 7" />
           </svg>
         </button>
-
-        <!-- fade -->
-        <div
-          class="bg-linear-to-r w-50 pointer-events-none absolute left-0 top-0 h-full from-cyan-700">
-        </div>
-        <div
-          class="bg-linear-to-l w-50 pointer-events-none absolute right-0 top-0 h-full from-cyan-700">
-        </div>
 
         <!-- CAROUSEL -->
         <div

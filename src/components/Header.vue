@@ -4,8 +4,8 @@
       :class="[
         'w-full',
         isScrolled
-          ? 'bg-sky-200/95 backdrop-blur shadow-md py-2'
-          : 'bg-sky-200 py-4',
+          ? 'bg-sky-800/70 backdrop-blur shadow-md py-2'
+          : 'bg-sky-800/70 backdrop-blur py-4',
       ]">
       <div
         class="mx-auto grid max-w-full grid-cols-[auto_1fr_auto] items-center gap-4">
@@ -13,7 +13,7 @@
         <div class="flex items-center justify-start">
           <a href="#home" class="py-1 text-2xl font-bold text-cyan-800">
             <img
-              :src="assetUrl('/uploads/system/logo.gif')"
+              :src="assetUrl('/uploads/system/jota_logo_licht.png')"
               class="ml-4 h-16 w-auto sm:h-20 md:h-24 lg:h-32"
               alt="Jota Logo" />
           </a>
@@ -21,13 +21,13 @@
         <!-- titel -->
         <div class="flex justify-center">
           <h1
-            class="text-primary font-garamond text-left text-3xl sm:text-5xl md:text-6xl lg:text-8xl">
+            class="font-garamond text-left text-3xl text-sky-200 sm:text-5xl md:text-6xl lg:text-8xl">
             Amsterdam Tours
           </h1>
         </div>
         <!-- Adress and phone -->
         <div class="hidden items-center justify-end gap-6 md:flex">
-          <div class="font-garamond text sky-600 space-y-1 text-right">
+          <div class="font-garamond space-y-1 text-right text-sky-200">
             <ul>
               <li
                 v-for="item in adresItems"
@@ -55,7 +55,7 @@
       </div>
     </section>
     <!-- Navbar links-->
-    <nav class="bg-cyan-700" aria-label="Main menu">
+    <nav class="bg-cyan-700/70 backdrop-blur" aria-label="Main menu">
       <div class="mx-auto flex max-w-7xl justify-between px-4 sm:px-6 lg:px-8">
         <ul
           class="hidden flex-wrap justify-start gap-x-6 py-3 text-sm font-medium text-white sm:flex">
@@ -140,6 +140,14 @@ const navItems = [
     link: "#tours",
     loc: "internal",
     icon: "mdi:map-search-outline",
+    showItem: true,
+  },
+  {
+    id: 8,
+    name: "Reviews",
+    link: "#reviews",
+    loc: "internal",
+    icon: "mdi:comment-quote-outline",
     showItem: true,
   },
   {

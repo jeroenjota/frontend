@@ -1,8 +1,8 @@
 <template>
   <div
     id="about"
-    class="bg-linear-to-r scroll-mt-45 from-sky-200 to-sky-300 px-4 py-6 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-5xl rounded-2xl border-2 border-gray-300 bg-sky-100 p-4 shadow-xl sm:p-6 lg:p-8">
+    class="scroll-mt-45 bg-transparent px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl rounded-2xl border-2 border-gray-300 bg-white/60 p-4 shadow-xl backdrop-blur-md sm:p-6 lg:p-8">
       <h2
         class="font-garamond text-primary mb-4 text-center text-2xl font-bold sm:text-3xl md:text-4xl">
         About Me
