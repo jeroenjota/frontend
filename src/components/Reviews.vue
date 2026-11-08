@@ -7,7 +7,7 @@
           <h2
             :id="selectedTourId ? `reviews-tour-${selectedTourId}` : undefined"
             class="font-garamond text-primary scroll-mt-45 text-center text-2xl font-bold sm:text-4xl">
-            Reviews
+            (Some) Reviews
             <span v-if="visibleReviews.length"></span>
           </h2>
             <span class="text-primary whitespace-nowrap text-center" v-if="averageStars !== null">
