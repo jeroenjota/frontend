@@ -1,195 +1,105 @@
 <template>
   <section id="tours" class="scroll-mt-45 bg-transparent px-4 py-4">
     <main class="mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
-      <h2
-        class="font-garamond text-primary mb-2 text-center text-2xl font-bold sm:text-4xl">
+      <h2 class="font-garamond text-primary mb-2 text-center text-2xl font-bold sm:text-4xl">
         All Tours
       </h2>
 
-      <div class="relative z-0 rounded-2xl p-2 px-4 shadow-lg">
-        <!-- LEFT BUTTON -->
-        <button
-          @mouseenter="startAutoScroll('right')"
-          @click="startAutoScroll('right')"
-          class="z-500 top-19/20 group absolute left-4 -translate-y-1/2 rounded-full p-3 shadow-lg backdrop-blur transition hover:scale-110 hover:bg-white">
-          <svg
-            class="h-6 w-6 text-gray-700 transition group-hover:-translate-x-0.5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <!-- RIGHT BUTTON -->
-        <button
-          @mouseenter="startAutoScroll('left')"
-          @click="startAutoScroll('left')"
-          class="z-500 top-19/20 group absolute right-4 -translate-y-1/2 rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition duration-200 hover:scale-110 hover:bg-white active:scale-95">
-          <svg
-            class="h-6 w-6 text-gray-700 transition group-hover:translate-x-0.5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
-        <!-- CAROUSEL -->
+      <div class="rounded-2xl p-2 px-4 shadow-lg">
         <div
-          ref="carousel"
-          @mouseenter="pauseAutoScroll"
-          @mouseleave="resumeAutoScroll"
-          class="flex gap-6 overflow-x-auto scroll-smooth pb-6 pt-8">
-          <TourCard
-            v-for="tour in tours"
-            :key="tour.id"
-            :tour="tour"
-            @click="$emit('open-tour', tour)"
-            class="tour-card"
-            ref="cards" />
+          class="tours-scroll overflow-y-scroll pr-3"
+          :style="{ maxHeight: gridHeight }"
+          tabindex="0"
+          role="region"
+          aria-label="All tours">
+          <div ref="grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <TourCard
+              v-for="tour in tours"
+              :key="tour.id"
+              :tour="tour"
+              @click="$emit('open-tour', tour)" />
+          </div>
         </div>
       </div>
     </main>
   </section>
 </template>
+
 <script setup>
-import { ref, onMounted, nextTick, onBeforeUnmount, watch } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 import TourCard from "./TourCard.vue";
 import { apiUrl } from "../api.js";
 
-const props = defineProps({
-  modalOpen: Boolean,
-});
-
 const tours = ref([]);
-const carousel = ref(null);
-const cards = ref([]);
+const grid = ref(null);
+const gridHeight = ref("");
+let resizeObserver;
 
-let direction = 1;
-let speed = 6;
-let running = true;
-let rafId = null;
+const updateGridHeight = () => {
+  const el = grid.value;
+  if (!el || !el.children.length) {
+    gridHeight.value = "";
+    return;
+  }
 
-// fetch tours
+  const columns = getComputedStyle(el).gridTemplateColumns.split(" ").length;
+  const visibleCards = columns * (columns === 1 ? 1 : 2);
+  const first = el.children[0];
+  const last = el.children[Math.min(visibleCards, el.children.length) - 1];
+  gridHeight.value = `${last.offsetTop + last.offsetHeight - first.offsetTop}px`;
+};
+
+watch(tours, () => {
+  if (!resizeObserver || !grid.value) return;
+  resizeObserver.disconnect();
+  resizeObserver.observe(grid.value);
+  for (const card of grid.value.children) resizeObserver.observe(card);
+  updateGridHeight();
+}, { flush: "post" });
+
 const fetchTours = async () => {
   try {
     const res = await fetch(apiUrl("/public/tours?current=true"));
-
     if (!res.ok) {
       throw new Error(`Failed to fetch tours: ${res.status}`);
     }
-
     tours.value = await res.json();
-
-    await nextTick();
-    updateCardScale();
   } catch (error) {
     console.error("Failed to load tours", error);
     tours.value = [];
   }
 };
 
-// auto scroll engine
-const autoScroll = () => {
-  if (!carousel.value || !running) {
-    return;
-  }
-
-  const el = carousel.value;
-  const max = el.scrollWidth - el.clientWidth;
-
-  const distance = direction === 1 ? max - el.scrollLeft : el.scrollLeft;
-
-  // const easing = Math.min(distance / 200, 1);
-
-  el.scrollLeft += direction * speed;
-
-  // reverse direction
-  if (distance < 2) {
-    direction *= -1;
-  }
-
-  updateCardScale();
-
-  rafId = requestAnimationFrame(autoScroll);
-};
-
-const startAutoScroll = (dir = "right") => {
-  if (props.modalOpen) return   // nooit starten als modal open
-  direction = dir === "left" ? -1 : 1
-  if (!rafId) rafId = requestAnimationFrame(autoScroll)
-}
-
-const stopAutoScroll = () => {
-
-  if(rafId){
-    cancelAnimationFrame(rafId)
-    rafId = null
-  }
-
-}
-const pauseAutoScroll = stopAutoScroll
-
-const resumeAutoScroll = () => {
-  if (props.modalOpen) return
-  startAutoScroll(direction === 1 ? "right" : "left");
-};
-
-// center focus cards
-const updateCardScale = () => {
-  if (!carousel.value) return;
-
-    cards.value.forEach((card) => {
-    const el = card.$el;
-    const rect = el.getBoundingClientRect();
-
-    const cardCenter = rect.left + rect.width / 2;
-    const distance = Math.abs(window.innerWidth / 2 - cardCenter);
-
-    const scale = Math.max(0.85, 1.15 - distance / 800);
-
-    el.style.transform = `scale(${scale})`;
-    el.style.zIndex = Math.round(scale * 100);
-  });
-};
-
-// modal pause
-watch(() => props.modalOpen, (open) => {
-
-  if(open){
-    // stop met kleine delay zodat we niet net een frame doorscrollen
-    setTimeout(() => {
-      stopAutoScroll()
-      console.log("Modal open – autoScroll gestopt")
-    }, 50)  // 50ms werkt meestal goed
-  } else {
-    // start pas als modal volledig gesloten is
-    startAutoScroll("right")
-  }
-
-})
-onMounted(async () => {
-  await fetchTours();
-
-  requestAnimationFrame(autoScroll);
-
-  carousel.value.addEventListener("scroll", updateCardScale);
-
-  if(!props.modalOpen){
-    startAutoScroll("right")
-  }
-
+onMounted(() => {
+  resizeObserver = new ResizeObserver(updateGridHeight);
+  resizeObserver.observe(grid.value);
+  fetchTours();
 });
 
 onBeforeUnmount(() => {
-  running = false;
+  resizeObserver.disconnect();
 });
 </script>
+
+<style scoped>
+.tours-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-color: #0e7490 #e0f2fe;
+  scrollbar-width: auto;
+}
+
+.tours-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.tours-scroll::-webkit-scrollbar-track {
+  background: #e0f2fe;
+  border-radius: 6px;
+}
+
+.tours-scroll::-webkit-scrollbar-thumb {
+  background: #0e7490;
+  border: 2px solid #e0f2fe;
+  border-radius: 6px;
+}
+</style>

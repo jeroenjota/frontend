@@ -1,10 +1,26 @@
 <template>
   <section id="discounts" class="scroll-mt-45 bg-transparent px-4 py-8">
-    <main
-      class="mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
+    <main class="mx-auto max-w-5xl rounded-md bg-white/60 p-4 shadow-lg backdrop-blur-md">
       <!-- HEADER -->
-      <header class="mb-4 flex flex-col items-center justify-between">
-        <div>
+      <header class="mb-4 grid grid-cols-[auto_1fr_auto] items-center gap-3">
+        <button
+          v-if="looping"
+          type="button"
+          aria-label="Scroll offers left"
+          @mouseenter="startAutoScroll('right')"
+          @click="startAutoScroll('left')"
+          class="group rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition hover:scale-110 hover:bg-white">
+          <svg
+            class="h-6 w-6 text-gray-700 transition group-hover:-translate-x-0.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <div v-else class="w-12"></div>
+        <div class="text-center">
           <h2
             class="font-garamond text-primary text-center text-2xl font-bold sm:text-4xl">
             Discounts
@@ -17,33 +33,37 @@
           </p>
         </div>
 
-        <div v-if="canScrollLeft || canScrollRight" class="flex gap-3">
-          <button
-            type="button"
-            aria-label="Previous offers"
-            :disabled="!canScrollLeft"
-            @click="scrollLeft"
-            class="rounded-full bg-white p-2 shadow hover:bg-sky-100 disabled:opacity-30">
-            <Icon icon="line-md:arrow-small-left" width="28" />
-          </button>
-
-          <button
-            type="button"
-            aria-label="Next offers"
-            :disabled="!canScrollRight"
-            @click="scrollRight"
-            class="rounded-full bg-white p-2 shadow hover:bg-sky-100 disabled:opacity-30">
-            <Icon icon="line-md:arrow-small-right" width="28" />
-          </button>
-        </div>
+        <button
+          v-if="looping"
+          type="button"
+          aria-label="Scroll offers right"
+          @mouseenter="startAutoScroll('left')"
+          @click="startAutoScroll('right')"
+          class="group rounded-full bg-white/70 p-3 shadow-lg backdrop-blur transition hover:scale-110 hover:bg-white">
+          <svg
+            class="h-6 w-6 text-gray-700 transition group-hover:translate-x-0.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        <div v-else class="w-12"></div>
       </header>
 
       <!-- CAROUSEL -->
       <div class="relative">
-        <ul ref="carousel" class="flex gap-6 overflow-x-auto scroll-smooth">
+        <ul
+          ref="carousel"
+          @mouseenter="pauseAutoScroll"
+          @mouseleave="resumeAutoScroll"
+          @focusin="pauseForFocus"
+          @focusout="resumeAfterFocus"
+          class="flex gap-6 overflow-x-auto scroll-smooth">
           <li
-            v-for="tour in tours"
-            :key="tour.id"
+            v-for="(tour, index) in displayedTours"
+            :key="`${tour.id}-${index}`"
             class="min-w-[85%] sm:min-w-[45%] lg:min-w-[30%]">
             <article
               @click="$emit('open-tour', tour)"
@@ -62,7 +82,7 @@
                 </figcaption>
 
                 <!-- CARD -->
-                <section class="bg-sky-100 p-4">
+                <section class="bg-white p-4">
                   <!-- Rating -->
                   <div class="flex items-center">
                     <Icon
@@ -88,7 +108,7 @@
                   <!-- TITLE -->
                   <div class="my-3 border-y py-2">
                     <h3
-                      class="flex h-20 items-center justify-center text-center text-lg font-semibold text-blue-800">
+                      class="flex items-center justify-center text-center text-lg font-semibold text-blue-800">
                       {{ tour.title }}
                     </h3>
                   </div>
@@ -102,7 +122,7 @@
 
                   <!-- PRICE -->
                   <footer
-                    class="flex items-center justify-between rounded bg-blue-500 px-2 py-1 text-sm font-bold text-white">
+                    class="flex items-center justify-between rounded bg-cyan-700 px-2 py-1 text-sm font-bold text-white">
                     <div class="flex flex-row gap-2">
                       <PriceBlock :tour="tour" />
                     </div>
@@ -137,9 +157,8 @@
 
 <script setup>
 import { Icon } from "@iconify/vue";
-import { ref, watch, onMounted } from "vue";
+import { computed, nextTick, ref, watch, onMounted, onBeforeUnmount } from "vue";
 import { apiUrl, assetUrl } from "../api.js";
-import { useCarousel } from "../composables/useCarousel.js";
 import PriceBlock from "./PriceBlock.vue";
 import ReviewLink from "./ReviewLink.vue";
 //  Moved to App.vue
@@ -147,17 +166,96 @@ import ReviewLink from "./ReviewLink.vue";
 // const emit = defineEmits(["open-tour"]);
 
 const tours = ref([]);
+const looping = ref(false);
+const displayedTours = computed(() =>
+  looping.value ? [...tours.value, ...tours.value] : tours.value,
+);
 const showTourist = ref(false);
-const {
-  container: carousel,
-  canScrollLeft,
-  canScrollRight,
-  scrollLeft,
-  scrollRight,
-  updateScrollState,
-} = useCarousel();
+const props = defineProps({
+  modalOpen: Boolean,
+});
+const carousel = ref(null);
 
-watch(tours, updateScrollState, { flush: "post" });
+let direction = 1;
+let mounted = false;
+let rafId = null;
+let pointerInside = false;
+let focusInside = false;
+
+const stopAutoScroll = () => {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+};
+
+const autoScroll = () => {
+  rafId = null;
+  const el = carousel.value;
+  if (!el || props.modalOpen || pointerInside || focusInside) return;
+
+  const firstCopy = el.children[tours.value.length];
+  if (!looping.value || !firstCopy || !el.firstElementChild) return;
+
+  const loopWidth = firstCopy.offsetLeft - el.firstElementChild.offsetLeft;
+  if (loopWidth <= 0) return;
+  const next = el.scrollLeft + direction;
+  el.scrollTo({
+    left: ((next % loopWidth) + loopWidth) % loopWidth,
+    behavior: "instant",
+  });
+  rafId = requestAnimationFrame(autoScroll);
+};
+
+const startAutoScroll = (dir) => {
+  if (dir) direction = dir === "left" ? -1 : 1;
+  if (mounted && looping.value && rafId === null && !props.modalOpen && !pointerInside && !focusInside) {
+    rafId = requestAnimationFrame(autoScroll);
+  }
+};
+
+const pauseAutoScroll = () => {
+  pointerInside = true;
+  stopAutoScroll();
+};
+
+const resumeAutoScroll = () => {
+  pointerInside = false;
+  startAutoScroll();
+};
+
+const pauseForFocus = () => {
+  focusInside = true;
+  stopAutoScroll();
+};
+
+const resumeAfterFocus = (event) => {
+  if (event.currentTarget.contains(event.relatedTarget)) return;
+  focusInside = false;
+  startAutoScroll();
+};
+
+const updateLoop = async () => {
+  const el = carousel.value;
+  if (!el) return;
+
+  const first = el.firstElementChild;
+  const last = el.children[tours.value.length - 1];
+  looping.value = Boolean(
+    first && last && last.offsetLeft + last.offsetWidth - first.offsetLeft > el.clientWidth,
+  );
+  await nextTick();
+  if (!mounted) return;
+  if (looping.value) startAutoScroll();
+  else stopAutoScroll();
+};
+
+watch(tours, updateLoop, { flush: "post" });
+
+watch(() => props.modalOpen, (open) => {
+  if (open) stopAutoScroll();
+  else startAutoScroll();
+});
 
 const fetchTours = async () => {
   try {
@@ -175,6 +273,14 @@ const fetchTours = async () => {
 };
 
 onMounted(() => {
+  mounted = true;
   fetchTours();
+  window.addEventListener("resize", updateLoop);
+});
+
+onBeforeUnmount(() => {
+  mounted = false;
+  stopAutoScroll();
+  window.removeEventListener("resize", updateLoop);
 });
 </script>

@@ -8,7 +8,7 @@
     <Home />
     <!-- <Intro /> -->
     <Categories @open-tour="openTour" />
-    <Offers @open-tour="openTour" />
+    <Offers :modal-open="showTourDetail || showTerms || showPrivacy" @open-tour="openTour" />
     <Tours v-if="!showTourDetail" @open-tour="openTour" />
     <Reviews />
     <About />

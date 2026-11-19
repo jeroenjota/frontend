@@ -1,6 +1,6 @@
 <template>
   <article
-    class="min-w-80 max-w-90 shrink-0 overflow-hidden rounded-xl bg-white shadow transition hover:-translate-y-1 hover:shadow-xl">
+    class="min-w-0 overflow-hidden rounded-xl bg-white shadow transition hover:-translate-y-1 hover:shadow-xl">
     <img
       :src="assetUrl('/uploads/resized/' + tour.image)"
       class="h-64 w-full object-cover" />
@@ -13,9 +13,9 @@
       <p class="text-sm text-gray-600">
         {{ tour.duration }}h / {{ tour.groupSize }} people
       </p>
-      <div class="flex flex-row justify-between gap-1">
-        <p class="text-primary font-semibold">€{{ tour.price }}</p>
-        <ReviewLink :tour="tour" class="text-primary" />
+      <div class="flex flex-row justify-between gap-1 rounded-xl bg-cyan-700 p-4">
+        <PriceBlock :tour="tour" />
+        <ReviewLink :tour="tour" class="text-white" />
       </div>
     </div>
   </article>
@@ -23,6 +23,7 @@
 
 <script setup>
 import { assetUrl } from "../api.js";
+import PriceBlock from "./PriceBlock.vue";
 import ReviewLink from "./ReviewLink.vue";
 defineProps({
   tour: Object,
